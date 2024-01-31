@@ -1,33 +1,39 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Concert Sampler</title>
-        <link rel="stylesheet" href="assets/style.css">
-    </head>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Concert Sampler</title>
+    <link rel="stylesheet" href="assets/style.css">
+</head>
+
+<body>
+    <header>
+        Concert Sampler!
+    </header>
+    <main>
+        <div>
+            <aside id="search">
+                <input type="text" id="textSearch" onchange="searchMetros()">
+            </aside>
+            <div id="calendar">
+                calendar placeholder
+            </div>
+        </div>
+
+        <h2 id="authenticate">Click here to Spotify authenticate</h2>
+        <h2 id="refresh"></h2>
+
+        <div id="list-results">
+            <h1>List Results</h1>
+            <link id="spotify-login">
+            <!-- LOGIN PLACEHOLDER-->
+            <ul id="results-container"></ul>
+        </div>
+    </main>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script src="assets/script.js"></script>
-    <body>
-        <header>
-            Concert Sampler!
-        </header>
-        <main>
-            <div>
-                <aside id="search">
-                    <input type="text" id="textSearch" onchange="searchMetros()">
-                </aside>
-                <div id="calendar">
-                    calendar placeholder
-                </div>
-            </div>
-            
-            <div id="list-results">
-                <h1>List Results</h1>
-                <link id="spotify-login">
-                <!-- LOGIN PLACEHOLDER-->
-                <ul id="results-container"></ul>
-            </div>
-        </main>
-    </body>
+</body>
+
 </html>
