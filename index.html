@@ -21,14 +21,18 @@
         <div class="flex">
             <aside id="search">
             <nav class = "flex"> 
-                <input type="text" id="textSearch" onchange="searchMetros()" placeholder="Enter City">
+                <input type="text" id="textSearch" onkeypress="searchMetros()" placeholder="Enter City">
                 <button>Search</button>
             </nav>
-            </aside>
-            
-        
+          </aside>
         <div>
-            <p class="mainblurb">
+            </aside>
+            <div id="calendar">
+                <label for="dateRange">Date Range:</label>
+                <input type="date" id="startDate" value="2024-01-31" pattern="\d{4}-\d{2}-\d{2}" name="startDate" onchange="filterByDates(event);">
+                <input type="date" id="endDate" value="2025-12-31" pattern="\d{4}-\d{2}-\d{2}" name="endDate" onchange="filterByDates(event);">
+            </div>
+        <p class="mainblurb">
                 Travelling somewhere? Want to see a show? 
                 Let us know where you're going and we'll create a playlist with all your options!
             </p>

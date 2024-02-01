@@ -12,8 +12,12 @@ const redirectUri = 'https://magicaryn.github.io/ConcertSampler/index.html';
 // ---------------------------------------------------------------------------
 
 var eventObj = {};
+var jsonMetroObj = {};
+var cachedMetroId = null;
 
 $(document).ready(function () {
+    jsonMetroObj = getJambaseMetros();
+    document.getElementById("calendar").style.display = "none";
 })
 
 function httpGet(theUrl) {
@@ -46,7 +50,21 @@ function processJambaseMetrosResponse(response) {
 }
 
 function getJambaseEventsByMetroID(metroId) {
-    let URL = JAMBASE_API_URL + "/v1/events" + "?apikey=" + JAMBASE_API_KEY + "&geoMetroId=" + metroId;
+    if (metroId != null) {
+        cachedMetroId = metroId;
+    }
+
+    document.getElementById("search").style.display = "none";
+    document.getElementById("calendar").style.display = "block";
+
+    let startDate = document.getElementById("startDate").value;
+    let endDate = document.getElementById("endDate").value;
+
+    console.log("startDate: " + startDate);
+
+    let URL = JAMBASE_API_URL + "/v1/events" + "?apikey=" + JAMBASE_API_KEY + "&geoMetroId=" + cachedMetroId + "&eventDateFrom=" + startDate + "&eventDateTo=" + endDate;
+
+    console.log("URL: " + URL);
 
     let response = httpGet(URL);
 
@@ -68,6 +86,8 @@ function processJambaseEventsResponse(response) {
 }
 
 function getJambasePerformers(eventId) {
+    document.getElementById("calendar").style.display = "none";
+
     let container = document.getElementById("results-container");
 
     container.textContent = "";
@@ -92,21 +112,17 @@ function bindMetrosData(data) {
 function searchMetros() {
     let searchString = document.getElementById("textSearch").value;
 
-    
-
-    let jsonObj = getJambaseMetros();
-
     var resultsArr = [];
 
     let container = document.getElementById("results-container");
 
     container.textContent = "";
 
-    for (var i = 0; i < jsonObj.metros.length; ++i) {
-        if (jsonObj.metros[i].name.includes(searchString)) {
-            resultsArr.push({ id: jsonObj.metros[i].identifier, name: jsonObj.metros[i].name });
+    for (var i = 0; i < jsonMetroObj.metros.length; ++i) {
+        if (jsonMetroObj.metros[i].name.toLowerCase().includes(searchString.toLowerCase())) {
+            resultsArr.push({ id: jsonMetroObj.metros[i].identifier, name: jsonMetroObj.metros[i].name });
 
-            container.innerHTML += "<li onclick=\"getJambaseEventsByMetroID('" + jsonObj.metros[i].identifier + "')\">" + jsonObj.metros[i].name + "</li>"
+            container.innerHTML += "<li onclick=\"getJambaseEventsByMetroID('" + jsonMetroObj.metros[i].identifier + "')\">" + jsonMetroObj.metros[i].name + " ~ " + jsonMetroObj.metros[i].address.addressRegion + "</li>"
             console.log(searchString);
         }
     }
@@ -119,7 +135,9 @@ function searchMetros() {
 
 // Spotify API Functions // Spotify API Functions // Spotify API Functions // Spotify API Functions // Spotify API Functions // Spotify API Functions
 
-
+function filterByDates(e) {
+    getJambaseEventsByMetroID(null);
+}
 
 
 async function searchForSpotifyArtist(artist) {
