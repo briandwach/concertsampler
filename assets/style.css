@@ -1,5 +1,26 @@
 
+header {
+    font-size: xx-large;
+    font-weight: bold;
+}
 
+header img {
+    width: 75px;
+    height: 75px;
+}
+
+main {
+    margin-left: 15%;
+}
+
+.flex {
+    display: flex;
+}
+
+.mainblurb {
+    font-size: x-large;
+    width: 40%;
+    margin-left: 35%;
 
 #search {
 
@@ -7,7 +28,7 @@
 
 
 #calendar{
-
+    display: flex;
 }
 
 
