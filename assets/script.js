@@ -12,8 +12,9 @@ const redirectUri = 'https://magicaryn.github.io/ConcertSampler/index.html';
 // ---------------------------------------------------------------------------
 
 var eventObj = {};
-
+var jsonMetroObj = {}
 $(document).ready(function () {
+    jsonMetroObj = getJambaseMetros();
 })
 
 function httpGet(theUrl) {
@@ -92,21 +93,17 @@ function bindMetrosData(data) {
 function searchMetros() {
     let searchString = document.getElementById("textSearch").value;
 
-    
-
-    let jsonObj = getJambaseMetros();
-
     var resultsArr = [];
 
     let container = document.getElementById("results-container");
 
     container.textContent = "";
 
-    for (var i = 0; i < jsonObj.metros.length; ++i) {
-        if (jsonObj.metros[i].name.includes(searchString)) {
-            resultsArr.push({ id: jsonObj.metros[i].identifier, name: jsonObj.metros[i].name });
+    for (var i = 0; i < jsonMetroObj.metros.length; ++i) {
+        if (jsonMetroObj.metros[i].name.includes(searchString)) {
+            resultsArr.push({ id: jsonMetroObj.metros[i].identifier, name: jsonMetroObj.metros[i].name });
 
-            container.innerHTML += "<li onclick=\"getJambaseEventsByMetroID('" + jsonObj.metros[i].identifier + "')\">" + jsonObj.metros[i].name + "</li>"
+            container.innerHTML += "<li onclick=\"getJambaseEventsByMetroID('" + jsonMetroObj.metros[i].identifier + "')\">" + jsonMetroObj.metros[i].name + " ~ " + jsonMetroObj.metros[i].address.addressRegion + "</li>"
             console.log(searchString);
         }
     }
