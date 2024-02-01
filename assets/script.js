@@ -12,9 +12,12 @@ const redirectUri = 'https://magicaryn.github.io/ConcertSampler/index.html';
 // ---------------------------------------------------------------------------
 
 var eventObj = {};
-var jsonMetroObj = {}
+var jsonMetroObj = {};
+var cachedMetroId = null;
+
 $(document).ready(function () {
     jsonMetroObj = getJambaseMetros();
+    document.getElementById("calendar").style.display = "none";
 })
 
 function httpGet(theUrl) {
@@ -47,7 +50,21 @@ function processJambaseMetrosResponse(response) {
 }
 
 function getJambaseEventsByMetroID(metroId) {
-    let URL = JAMBASE_API_URL + "/v1/events" + "?apikey=" + JAMBASE_API_KEY + "&geoMetroId=" + metroId;
+    if (metroId != null) {
+        cachedMetroId = metroId;
+    }
+
+    document.getElementById("search").style.display = "none";
+    document.getElementById("calendar").style.display = "block";
+
+    let startDate = document.getElementById("startDate").value;
+    let endDate = document.getElementById("endDate").value;
+
+    console.log("startDate: " + startDate);
+
+    let URL = JAMBASE_API_URL + "/v1/events" + "?apikey=" + JAMBASE_API_KEY + "&geoMetroId=" + cachedMetroId + "&eventDateFrom=" + startDate + "&eventDateTo=" + endDate;
+
+    console.log("URL: " + URL);
 
     let response = httpGet(URL);
 
@@ -69,6 +86,8 @@ function processJambaseEventsResponse(response) {
 }
 
 function getJambasePerformers(eventId) {
+    document.getElementById("calendar").style.display = "none";
+
     let container = document.getElementById("results-container");
 
     container.textContent = "";
@@ -116,7 +135,9 @@ function searchMetros() {
 
 // Spotify API Functions // Spotify API Functions // Spotify API Functions // Spotify API Functions // Spotify API Functions // Spotify API Functions
 
-
+function filterByDates(e) {
+    getJambaseEventsByMetroID(null);
+}
 
 
 async function searchForSpotifyArtist(artist) {
