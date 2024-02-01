@@ -8,7 +8,7 @@ const JAMBASE_API_KEY = "c06e8359-9476-484d-8390-20a1f50ca68d";
 // clientID is specific to the registered application with Spotify
 const clientId = '2b183a70265148259c2caa4ab030b5ec';
 // Before pushing to main branch change the URL to the final project deployed URL
-const redirectUri = 'https://magicaryn.github.io/ConcertSampler/index.html';
+const redirectUri = 'http://127.0.0.1:5500/index.html';
 // ---------------------------------------------------------------------------
 
 var eventObj = {};
@@ -150,8 +150,8 @@ async function getSpotifyArtistTopTracks(artistID, artist, accessToken) {
 
     container.textContent = "";
 
-    container.innerHTML += ('<li>' + artist + '</li>');
-    container.innerHTML += ('<li></li>');
+    //container.innerHTML += ('<li>' + artist + '</li>');
+    //container.innerHTML += ('<li></li>');
 
     const response = await fetch('https://api.spotify.com/v1/artists/' + artistID + '/top-tracks?market=US', {
         method: 'GET',
@@ -167,7 +167,7 @@ async function getSpotifyArtistTopTracks(artistID, artist, accessToken) {
     var trackIdsArray = [];
 
     for (var t = 0; t < data.tracks.length; t++) {
-        container.innerHTML += ("<li>Track name: " + data.tracks[t].name + "</li><li>Track Spotify ID:" + data.tracks[t].id + "</li>");
+        //container.innerHTML += ("<li>Track name: " + data.tracks[t].name + "</li><li>Track Spotify ID:" + data.tracks[t].id + "</li>");
         trackIdsArray[t] = data.tracks[t].id;
     };
     
@@ -179,7 +179,7 @@ async function getSpotifyArtistTopTracks(artistID, artist, accessToken) {
 async function getSpotifyUserID(trackIdsArray, artist, accessToken) {
 
     let container = document.getElementById("results-container");
-    container.innerHTML += ('<li></li>');
+    //container.innerHTML += ('<li></li>');
 
 
     const response = await fetch('https://api.spotify.com/v1/me', {
@@ -209,7 +209,7 @@ async function createSpotifyPlaylist(userId, trackIdsArray, artist, accessToken)
         }, body:JSON.stringify({
             "name": artist + " from Concert Sampler",
             "description": "Created by Concert Sampler web application",
-            "public": false
+            "public": true
         })
     });
 
@@ -247,9 +247,25 @@ async function addItemsToPlaylist(playlistId, userId, trackIdsArray, accessToken
     console.log(data);
 
     let container = document.getElementById("results-container");
-    container.innerHTML += ('<li></li>');
+    //container.innerHTML += ('<li></li>');
     container.innerHTML += ('<li>Good news!  Your playlist has been created.  Check your Spotify library.</li>');
 
+    iframePlaylist(playlistId);
+//Add event listener for deleting playlist.
+}
+
+
+function iframePlaylist(playlistId) {
+ let container = document.getElementById("playlistiframe");
+    container.innerHTML += ("<iframe " + 
+    "style='border-radius:12px' " +
+    "src=https://open.spotify.com/embed/playlist/" + playlistId + "?utm_source=generator&theme=0 " +
+    "width='100%' " +
+    "height='625' " +
+    "frameBorder='0' " +
+    "allowfullscreen='' " +
+    "allow='autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture' " +
+    "loading='lazy'>");
 }
 
 function optionToRemovePlaylist(item) {
@@ -300,7 +316,7 @@ var spotifyAuthentification = async function () {
 
 
 
-    const scope = 'user-read-private user-read-email playlist-modify-public playlist-modify-private user-top-read';
+    const scope = 'playlist-modify-public';
     const authUrl = new URL("https://accounts.spotify.com/authorize");
 
     // generated in the previous step
