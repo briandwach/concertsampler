@@ -17,6 +17,18 @@ main {
     display: flex;
 }
 
+li::marker {
+    color: red;
+}
+
+.liGreen {
+    color: green;
+}
+
+.liBlue {
+    color: blue;
+}
+
 .mainblurb {
     font-size: x-large;
     width: 40%;

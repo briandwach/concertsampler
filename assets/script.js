@@ -118,11 +118,19 @@ function searchMetros() {
 
     container.textContent = "";
 
+    var index = 0;
+
     for (var i = 0; i < jsonMetroObj.metros.length; ++i) {
         if (jsonMetroObj.metros[i].name.toLowerCase().includes(searchString.toLowerCase())) {
             resultsArr.push({ id: jsonMetroObj.metros[i].identifier, name: jsonMetroObj.metros[i].name });
 
-            container.innerHTML += "<li onclick=\"getJambaseEventsByMetroID('" + jsonMetroObj.metros[i].identifier + "')\">" + jsonMetroObj.metros[i].name + " ~ " + jsonMetroObj.metros[i].address.addressRegion + "</li>"
+            var cssClass = "liGreen";
+            if (index % 2 == 0) {
+                cssClass = "liBlue"
+            }
+            ++index;
+
+            container.innerHTML += "<li class=\"" + cssClass + "\" onclick=\"getJambaseEventsByMetroID('" + jsonMetroObj.metros[i].identifier + "')\">" + jsonMetroObj.metros[i].name + " ~ " + jsonMetroObj.metros[i].address.addressRegion + "</li>"
             console.log(searchString);
         }
     }
