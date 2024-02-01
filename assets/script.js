@@ -119,7 +119,7 @@ function searchMetros() {
     container.textContent = "";
 
     for (var i = 0; i < jsonMetroObj.metros.length; ++i) {
-        if (jsonMetroObj.metros[i].name.includes(searchString)) {
+        if (jsonMetroObj.metros[i].name.toLowerCase().includes(searchString.toLowerCase())) {
             resultsArr.push({ id: jsonMetroObj.metros[i].identifier, name: jsonMetroObj.metros[i].name });
 
             container.innerHTML += "<li onclick=\"getJambaseEventsByMetroID('" + jsonMetroObj.metros[i].identifier + "')\">" + jsonMetroObj.metros[i].name + " ~ " + jsonMetroObj.metros[i].address.addressRegion + "</li>"
