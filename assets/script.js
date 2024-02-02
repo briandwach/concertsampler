@@ -77,11 +77,20 @@ function getJambaseEventsByMetroID(metroId) {
 
     container.textContent = "";
 
+    artistsArr = [];
+
     if (jsonObj.events != null) {
         for (var i = 0; i < jsonObj.events.length; ++i) {
             let currentDate = new Date(jsonObj.events[i].startDate);
 
             container.innerHTML += "<li onclick=\"getJambasePerformers('" + jsonObj.events[i].identifier + "')\">" + jsonObj.events[i].name + " Date: " + currentDate.toLocaleDateString() + "</li>"
+        }
+
+        for (var i = 0; i < eventObj.events.length; ++i) {
+            for (var j = 0; j < eventObj.events[i].performer.length; ++j) {
+                artistsArr.push(eventObj.events[i].performer[j].name);
+                container.innerHTML += "<li onclick=\"searchForSpotifyArtist('" + eventObj.events[i].performer[j].name + "')\">" + eventObj.events[i].performer[j].name + "</li>"
+            }
         }
     }
 }
