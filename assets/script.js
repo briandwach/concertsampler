@@ -14,10 +14,16 @@ const redirectUri = 'https://magicaryn.github.io/ConcertSampler/index.html';
 var eventObj = {};
 var jsonMetroObj = {};
 var cachedMetroId = null;
+var artistsArr = [];
 
 $(document).ready(function () {
     jsonMetroObj = getJambaseMetros();
     document.getElementById("calendar").style.display = "none";
+
+    let todayDate = new Date();
+    let todayDateString = todayDate.toISOString().split('T')[0];
+
+    document.getElementById("startDate").value = todayDateString;
 })
 
 function httpGet(theUrl) {
@@ -63,16 +69,20 @@ function getJambaseEventsByMetroID(metroId) {
 
     let jsonObj = JSON.parse(response);
 
+    console.log("RESPONSE EVENTS: " + response);
+
     eventObj = jsonObj;
 
     let container = document.getElementById("results-container");
 
     container.textContent = "";
 
-    for (var i = 0; i < jsonObj.events.length; ++i) {
-        let currentDate = new Date(jsonObj.events[i].startDate);
+    if (jsonObj.events != null) {
+        for (var i = 0; i < jsonObj.events.length; ++i) {
+            let currentDate = new Date(jsonObj.events[i].startDate);
 
-        container.innerHTML += "<li onclick=\"getJambasePerformers('" + jsonObj.events[i].identifier + "')\">" + jsonObj.events[i].name + " Date: " + currentDate.toLocaleDateString() + "</li>"
+            container.innerHTML += "<li onclick=\"getJambasePerformers('" + jsonObj.events[i].identifier + "')\">" + jsonObj.events[i].name + " Date: " + currentDate.toLocaleDateString() + "</li>"
+        }
     }
 }
 
@@ -86,10 +96,12 @@ function getJambasePerformers(eventId) {
     let container = document.getElementById("results-container");
 
     container.textContent = "";
+    artistsArr = [];
 
     for (var i = 0; i < eventObj.events.length; ++i) {
         if (eventObj.events[i].identifier === eventId) {
             for (var j = 0; j < eventObj.events[i].performer.length; ++j) {
+                artistsArr.push(eventObj.events[i].performer[j].name);
                 container.innerHTML += "<li onclick=\"searchForSpotifyArtist('" + eventObj.events[i].performer[j].name + "')\">" + eventObj.events[i].performer[j].name + "</li>"
             }
         }
