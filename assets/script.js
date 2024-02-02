@@ -15,7 +15,6 @@ var eventObj = {};
 var jsonMetroObj = {};
 var cachedMetroId = null;
 var artistsArr = [];
-var allTrackIds = [];
 
 $(document).ready(function () {
     jsonMetroObj = getJambaseMetros();
@@ -93,12 +92,6 @@ function getJambaseEventsByMetroID(metroId) {
                 container.innerHTML += "<li onclick=\"searchForSpotifyArtist('" + eventObj.events[i].performer[j].name + "')\">" + eventObj.events[i].performer[j].name + "</li>"
             }
         }
-
-        for (var k = 0; k < artistsArr.length; ++k) {
-            searchForSpotifyArtist(artistsArr[k]);
-        }
-
-        getSpotifyUserID(allTrackIds, artist, accessToken);
     }
 }
 
@@ -207,13 +200,11 @@ async function getSpotifyArtistTopTracks(artistID, artist, accessToken) {
     for (var t = 0; t < data.tracks.length; t++) {
         //container.innerHTML += ("<li>Track name: " + data.tracks[t].name + "</li><li>Track Spotify ID:" + data.tracks[t].id + "</li>");
         trackIdsArray[t] = data.tracks[t].id;
-        allTrackIds.push(data.tracks[t].id);
     };
     
     console.log(trackIdsArray);
 
-
-    // getSpotifyUserID(trackIdsArray, artist, accessToken);
+    getSpotifyUserID(trackIdsArray, artist, accessToken);
 }
 
 async function getSpotifyUserID(trackIdsArray, artist, accessToken) {
