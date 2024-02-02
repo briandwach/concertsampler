@@ -2,6 +2,12 @@
 header {
     font-size: xx-large;
     font-weight: bold;
+    color: #ff0062;
+   text-shadow: 3px 3px 5px black;
+
+
+   
+  ;
 }
 
 header img {
@@ -18,21 +24,28 @@ main {
 }
 
 li::marker {
-    color: red;
+    color: rgb(227, 209, 209);
 }
 
 .liGreen {
-    color: green;
+    color: #ea6a3f;
 }
 
 .liBlue {
-    color: blue;
+    color: #ff0062;
 }
 
 .mainblurb {
     font-size: x-large;
     width: 40%;
-    margin-left: 35%;
+    margin-left: 35%;}
+
+
+button {
+    background-color: black;
+    color: #ff0062;
+    border-radius: 10px;
+}
 
 #search {
 
@@ -55,4 +68,27 @@ li::marker {
 
 
 #results-container{
+}
+
+/* media queries */
+
+@media screen and (max-width: 700px) {
+.flex {
+    flex-direction: column;
+}
+
+
+    .mainblurb {
+        position: relative;
+        z-index: 1;
+        margin-left: 0%;
+    }
+
+  aside {
+        margin-right: 50px;
+        position: relative;
+        z-index: 2;
+    }
+
+
 }
