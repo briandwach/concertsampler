@@ -18,6 +18,11 @@ var cachedMetroId = null;
 $(document).ready(function () {
     jsonMetroObj = getJambaseMetros();
     document.getElementById("calendar").style.display = "none";
+
+    let todayDate = new Date();
+    let todayDateString = todayDate.toISOString().split('T')[0];
+
+    document.getElementById("startDate").value = todayDateString;
 })
 
 function httpGet(theUrl) {
@@ -63,16 +68,20 @@ function getJambaseEventsByMetroID(metroId) {
 
     let jsonObj = JSON.parse(response);
 
+    console.log("RESPONSE EVENTS: " + response);
+
     eventObj = jsonObj;
 
     let container = document.getElementById("results-container");
 
     container.textContent = "";
 
-    for (var i = 0; i < jsonObj.events.length; ++i) {
-        let currentDate = new Date(jsonObj.events[i].startDate);
+    if (jsonObj.events != null) {
+        for (var i = 0; i < jsonObj.events.length; ++i) {
+            let currentDate = new Date(jsonObj.events[i].startDate);
 
-        container.innerHTML += "<li onclick=\"getJambasePerformers('" + jsonObj.events[i].identifier + "')\">" + jsonObj.events[i].name + " Date: " + currentDate.toLocaleDateString() + "</li>"
+            container.innerHTML += "<li onclick=\"getJambasePerformers('" + jsonObj.events[i].identifier + "')\">" + jsonObj.events[i].name + " Date: " + currentDate.toLocaleDateString() + "</li>"
+        }
     }
 }
 
