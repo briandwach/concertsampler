@@ -77,7 +77,9 @@ function getJambaseEventsByMetroID(metroId) {
     container.textContent = "";
 
     for (var i = 0; i < jsonObj.events.length; ++i) {
-        container.innerHTML += "<li onclick=\"getJambasePerformers('" + jsonObj.events[i].identifier + "')\">" + jsonObj.events[i].name + "</li>"
+        let currentDate = new Date(jsonObj.events[i].startDate);
+
+        container.innerHTML += "<li onclick=\"getJambasePerformers('" + jsonObj.events[i].identifier + "')\">" + jsonObj.events[i].name + " Date: " + currentDate.toLocaleDateString() + "</li>"
     }
 }
 
