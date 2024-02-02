@@ -14,6 +14,7 @@ const redirectUri = 'https://magicaryn.github.io/ConcertSampler/index.html';
 var eventObj = {};
 var jsonMetroObj = {};
 var cachedMetroId = null;
+var artistsArr = [];
 
 $(document).ready(function () {
     jsonMetroObj = getJambaseMetros();
@@ -95,10 +96,12 @@ function getJambasePerformers(eventId) {
     let container = document.getElementById("results-container");
 
     container.textContent = "";
+    artistsArr = [];
 
     for (var i = 0; i < eventObj.events.length; ++i) {
         if (eventObj.events[i].identifier === eventId) {
             for (var j = 0; j < eventObj.events[i].performer.length; ++j) {
+                artistsArr.push(eventObj.events[i].performer[j].name);
                 container.innerHTML += "<li onclick=\"searchForSpotifyArtist('" + eventObj.events[i].performer[j].name + "')\">" + eventObj.events[i].performer[j].name + "</li>"
             }
         }
