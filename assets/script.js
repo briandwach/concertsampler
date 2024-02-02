@@ -399,11 +399,21 @@ const getToken = async token => {
     const body = await fetch(url, payload);
     const response = await body.json();
 
-    refreshEl.textContent=('Click here to refresh Spotify token');
-
     localStorage.setItem('access_token', response.access_token);
     localStorage.setItem('refresh_token', response.refresh_token);
     // ---------------------------------------------------------------------------
+
+
+    // ------  Store display name
+    const getDisplayName = await fetch('https://api.spotify.com/v1/me', {
+        method: 'GET',
+        headers: {
+            Authorization: 'Bearer ' + localStorage.getItem('access_token')
+        }
+    });
+
+    const data = await getDisplayName.json();
+    localStorage.setItem('display_name', data.display_name);
 };
 
 
@@ -436,15 +446,19 @@ const getRefreshToken = async () => {
 
 
 var checkUserAuthentification = function() {
-    if (window.location.search !== '') {
+    var displayName = localStorage.getItem('display_name');
+    var test = localStorage.getItem("refresh_token");
+
+    if ((localStorage.getItem("refresh_token")) !== "undefined") {
+        getRefreshToken();
+        authenticateEl.textContent = ('Logged into Spotify as ' + displayName);
+    } else if (window.location.search !== '') {
         getToken();
+        authenticateEl.textContent = ('Logged into Spotify as ' + displayName);   
+    } else {
+        authenticateEl.textContent = ('Click here to link your Spotify account');
+        authenticateEl.addEventListener('click', spotifyAuthentification);
     };
 };
-
-
-
-
-authenticateEl.addEventListener('click', spotifyAuthentification);
-refreshEl.addEventListener('click', getRefreshToken);
 
 checkUserAuthentification();
