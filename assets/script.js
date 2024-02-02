@@ -34,13 +34,6 @@ function getJambaseMetros() {
 
     let jsonObj = JSON.parse(response);
 
-    for (var i = 0; i < jsonObj.metros.length; ++i) {
-        console.log("identifier: " + jsonObj.metros[i].identifier);
-        console.log("name: " + jsonObj.metros[i].name);
-    }
-
-    console.log("response: " + response)
-
     return jsonObj;
 }
 
@@ -103,14 +96,6 @@ function getJambasePerformers(eventId) {
     }
 }
 
-function getJambasePerformerName() {
-    return // performer name
-}
-
-function bindMetrosData(data) {
-
-}
-
 function searchMetros() {
     let searchString = document.getElementById("textSearch").value;
 
@@ -132,12 +117,9 @@ function searchMetros() {
             }
             ++index;
 
-            container.innerHTML += "<li class=\"" + cssClass + "\" onclick=\"getJambaseEventsByMetroID('" + jsonMetroObj.metros[i].identifier + "')\">" + jsonMetroObj.metros[i].name + " ~ " + jsonMetroObj.metros[i].address.addressRegion + "</li>"
-            console.log(searchString);
+            container.innerHTML += "<li class=\"" + cssClass + "\" onclick=\"getJambaseEventsByMetroID('" + jsonMetroObj.metros[i].identifier + "')\">" + jsonMetroObj.metros[i].name + " ~ " + jsonMetroObj.metros[i].address.addressRegion + "</li>";
         }
-    }
-
-    
+    }    
 
     return resultsArr;
 }
