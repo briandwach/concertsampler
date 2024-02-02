@@ -15,6 +15,7 @@ var eventObj = {};
 var jsonMetroObj = {};
 var cachedMetroId = null;
 var artistsArr = [];
+var allTracksArr = [];
 
 $(document).ready(function () {
     jsonMetroObj = getJambaseMetros();
@@ -151,8 +152,19 @@ function filterByDates(e) {
     getJambaseEventsByMetroID(null);
 }
 
+function createAllTracksPlaylist() {
+    var i = 0;
+    var lastArtist = "";
+    for (i = 0; i < artistsArr.length; ++i) {
+        if (i == artistsArr.length - 1) {
+            searchForSpotifyArtist(artistsArr[i], true);
+        } else {
+            searchForSpotifyArtist(artistsArr[i], false);
+        }
+    }
+}
 
-async function searchForSpotifyArtist(artist) {
+async function searchForSpotifyArtist(artist, createPlaylist) {
     //alert("Calling searchForSpotifyArtist for parameter artist as: " + artist);
     //return; //Spotify Artist ID
     let accessToken = localStorage.getItem('access_token');
@@ -171,11 +183,11 @@ async function searchForSpotifyArtist(artist) {
     
     var spotifyArtistId = (data.artists.items[0].id);
 
-    getSpotifyArtistTopTracks(spotifyArtistId, artist, accessToken);
+    getSpotifyArtistTopTracks(spotifyArtistId, artist, accessToken, createPlaylist);
 };
 
 
-async function getSpotifyArtistTopTracks(artistID, artist, accessToken) {
+async function getSpotifyArtistTopTracks(artistID, artist, accessToken, createPlaylist) {
     let container = document.getElementById("results-container");
 
     container.textContent = "";
@@ -199,11 +211,14 @@ async function getSpotifyArtistTopTracks(artistID, artist, accessToken) {
     for (var t = 0; t < data.tracks.length; t++) {
         //container.innerHTML += ("<li>Track name: " + data.tracks[t].name + "</li><li>Track Spotify ID:" + data.tracks[t].id + "</li>");
         trackIdsArray[t] = data.tracks[t].id;
+        allTracksArr.push(data.tracks[t].id);
     };
     
     console.log(trackIdsArray);
 
-    getSpotifyUserID(trackIdsArray, artist, accessToken);
+    if (createPlaylist) {
+        getSpotifyUserID(allTracksArr, artist, accessToken);
+    }
 }
 
 async function getSpotifyUserID(trackIdsArray, artist, accessToken) {
