@@ -89,7 +89,6 @@ function getJambaseEventsByMetroID(metroId) {
         for (var i = 0; i < eventObj.events.length; ++i) {
             for (var j = 0; j < eventObj.events[i].performer.length; ++j) {
                 artistsArr.push(eventObj.events[i].performer[j].name);
-                container.innerHTML += "<li onclick=\"searchForSpotifyArtist('" + eventObj.events[i].performer[j].name + "')\">" + eventObj.events[i].performer[j].name + "</li>"
             }
         }
     }
