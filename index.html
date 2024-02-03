@@ -28,10 +28,14 @@
           </aside>
         <div>
             </aside>
-            <div id="calendar">
+            <div class="left-margin" id="calendar">
                 <label for="dateRange">Date Range:</label>
+                <div id="startDateContainer">
                 <input type="date" id="startDate" pattern="\d{4}-\d{2}-\d{2}" name="startDate" onchange="filterByDates(event);">
+            </div>
+            <div id="endDateContainer">
                 <input type="date" id="endDate" value="2024-11-01" pattern="\d{4}-\d{2}-\d{2}" name="endDate" onchange="filterByDates(event);">
+            </div>
             </div>
         <p class="mainblurb">
                 Travelling somewhere? Want to see a show? 
