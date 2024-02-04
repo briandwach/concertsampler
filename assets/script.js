@@ -219,7 +219,7 @@ async function getSpotifyArtistTopTracks(artistID, artist, accessToken, createPl
         }
     });
 
-    const data = response.json();
+    const data = await response.json();
     console.log('Spotify:');
     console.log("Tracks data: " + data);
     
@@ -253,7 +253,7 @@ async function getSpotifyUserID(trackIdsArray, artist, accessToken) {
         }
     });
 
-    const data = response.json();
+    const data = await response.json();
     console.log('Spotify:');
     console.log("Response " + response);
 
@@ -277,7 +277,7 @@ async function createSpotifyPlaylist(userId, trackIdsArray, artist, accessToken)
         })
     });
 
-    const data = response.json();
+    const data = await response.json();
     console.log('Spotify:');
     console.log(response);
 
@@ -308,7 +308,7 @@ async function addItemsToPlaylist(playlistId, userId, trackIdsArray, accessToken
         })
     });
 
-    const data = response.json();
+    const data = await response.json();
     console.log('Spotify:');
     console.log(data);
 
@@ -497,14 +497,14 @@ window.location.replace(redirectUri);
 }
 
 
-var checkUserAuthentification = async function() {
+var checkUserAuthentification = function() {
     if ((localStorage.getItem("refresh_token")) !== "undefined" && localStorage.getItem("refresh_token") !== null) {
-        await getRefreshToken();
+        getRefreshToken();
         loggedInEl.textContent = ('Welcome, ' + localStorage.getItem('display_name') + '!');
         authenticateEl.textContent = ('Click here to log out of Spotify');
         authenticateEl.addEventListener('click', logOut);
     } else if (window.location.search !== '' && !window.location.search.includes("error")) {
-        await getToken();
+        getToken();
         loggedInEl.textContent = ('Welcome, ' + localStorage.getItem('display_name') + '!');
         authenticateEl.textContent = ('Click here to log out of Spotify');
         authenticateEl.addEventListener('click', logOut);   
