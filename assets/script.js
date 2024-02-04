@@ -27,6 +27,10 @@ $(document).ready(function () {
     document.getElementById("startDate").value = todayDateString;
 })
 
+function setCheckboxById(checkId) {
+    document.getElementById(checkId).checked = true;
+}
+
 function httpGet(theUrl) {
     var xmlHttp = new XMLHttpRequest();
     xmlHttp.open("GET", theUrl, false); // false for synchronous request
@@ -93,6 +97,8 @@ function getJambaseEventsByMetroID(metroId) {
             }
         }
     }
+
+    setCheckboxById("checkboxNoLabel1");
 }
 
 function processJambaseEventsResponse(response) {
@@ -115,6 +121,8 @@ function getJambasePerformers(eventId) {
             }
         }
     }
+
+    setCheckboxById("checkboxNoLabel2");
 }
 
 function searchMetros() {
@@ -184,6 +192,7 @@ async function searchForSpotifyArtist(artist, createPlaylist) {
     var spotifyArtistId = (data.artists.items[0].id);
 
     getSpotifyArtistTopTracks(spotifyArtistId, artist, accessToken, createPlaylist);
+
 };
 
 
@@ -265,6 +274,8 @@ async function createSpotifyPlaylist(userId, trackIdsArray, artist, accessToken)
     var playlistId = data.id; 
 
     addItemsToPlaylist(playlistId, userId, trackIdsArray, accessToken);
+
+    setCheckboxById("checkboxNoLabel3");
 }
 
 async function addItemsToPlaylist(playlistId, userId, trackIdsArray, accessToken) {
@@ -468,8 +479,6 @@ window.location.replace(redirectUri);
 
 
 var checkUserAuthentification = async function() {
-    debugger;
-    
     if ((localStorage.getItem("refresh_token")) !== "undefined" && localStorage.getItem("refresh_token") !== null) {
         await getRefreshToken();
         loggedInEl.textContent = ('Welcome, ' + localStorage.getItem('display_name') + '!');
