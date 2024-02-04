@@ -1,5 +1,6 @@
 var authenticateEl = document.getElementById("authenticate");
 var loggedInEl = document.getElementById("loggedin");
+var unfollowEl = document.getElementById("unfollow");
 
 const JAMBASE_API_URL = "https://www.jambase.com/jb-api";
 const JAMBASE_API_KEY = "c06e8359-9476-484d-8390-20a1f50ca68d";
@@ -9,6 +10,7 @@ const JAMBASE_API_KEY = "c06e8359-9476-484d-8390-20a1f50ca68d";
 const clientId = '2b183a70265148259c2caa4ab030b5ec';
 // Before pushing to main branch change the URL to the final project deployed URL
 const redirectUri = 'https://magicaryn.github.io/ConcertSampler/index.html';
+//const redirectUri = 'http://127.0.0.1:5500/index.html';
 // ---------------------------------------------------------------------------
 
 var eventObj = {};
@@ -303,15 +305,13 @@ async function addItemsToPlaylist(playlistId, userId, trackIdsArray, accessToken
     console.log(data);
 
     let container = document.getElementById("results-container");
-    //container.innerHTML += ('<li></li>');
     container.innerHTML += ('<li>Good news!  Your playlist has been created.  It has been added to your Spotify library and can also be listened to here.</li>');
 
-    iframePlaylist(playlistId);
-//Add event listener for deleting playlist.
+    iframePlaylist(playlistId, accessToken);
 }
 
 
-function iframePlaylist(playlistId) {
+function iframePlaylist(playlistId, accessToken) {
  let container = document.getElementById("playlistiframe");
     container.innerHTML += ("<iframe " + 
     "style='border-radius:12px' " +
@@ -321,11 +321,22 @@ function iframePlaylist(playlistId) {
     "frameBorder='0' " +
     "allowfullscreen='' " +
     "allow='autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture' " +
-    "loading='lazy'>");
+    "loading='lazy'><br />" +
+    "<button id='unfollow'>Click here to remove playlist from your library</button>");
+
+    unfollowEl.addEventListener('click', unfollowPlaylist(playlistId, accessToken));
 }
 
-function optionToRemovePlaylist(item) {
-    return;
+async function unfollowPlaylist(playlistId, accessToken) {
+
+    const response = await fetch('https://api.spotify.com/v1/playlists/' + playlistId + '/followers', {
+        method: 'DELETE',
+        headers: {
+            Authorization: 'Bearer ' + accessToken
+        }
+    });
+    
+    unfollowEl.remove();
 }
 
 // Spotify Authentification
