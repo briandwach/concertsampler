@@ -127,6 +127,11 @@ function getJambasePerformers(eventId) {
     setCheckboxById("checkboxNoLabel2");
 }
 
+function onClickCreateAllTracksPlaylist() {
+    console.log("Calling createAllTracksPlaylist()");
+    createAllTracksPlaylist();
+}
+
 function searchMetros() {
     let searchString = document.getElementById("textSearch").value;
 
@@ -166,6 +171,7 @@ function createAllTracksPlaylist() {
     var i = 0;
     var lastArtist = "";
     for (i = 0; i < artistsArr.length; ++i) {
+        console.log("Getting top tracks for: " + artistsArr[i].name) + " index: " + i;
         if (i == artistsArr.length - 1) {
             searchForSpotifyArtist(artistsArr[i], true);
         } else {
@@ -187,9 +193,9 @@ async function searchForSpotifyArtist(artist, createPlaylist) {
     });
 
     const data = await response.json();
-    console.log('Spotify:');
-    console.log(data);   
-    console.log(data.artists.items[0].id);
+    console.log('Spotify artist: ' + artist);
+    console.log("Response for artist: " + artist + " : " + response);   
+    console.log("Artist ID: " + data.artists.items[0].id);
     
     var spotifyArtistId = (data.artists.items[0].id);
 
@@ -213,9 +219,9 @@ async function getSpotifyArtistTopTracks(artistID, artist, accessToken, createPl
         }
     });
 
-    const data = await response.json();
+    const data = response.json();
     console.log('Spotify:');
-    console.log(data);
+    console.log("Tracks data: " + data);
     
     var trackIdsArray = [];
 
@@ -227,7 +233,9 @@ async function getSpotifyArtistTopTracks(artistID, artist, accessToken, createPl
     
     console.log(trackIdsArray);
 
+    console.log("createPlaylist: " + createPlaylist)
     if (createPlaylist) {
+        console.log("Calling getSpotifyUserID");
         getSpotifyUserID(allTracksArr, artist, accessToken);
     }
 }
@@ -245,9 +253,9 @@ async function getSpotifyUserID(trackIdsArray, artist, accessToken) {
         }
     });
 
-    const data = await response.json();
+    const data = response.json();
     console.log('Spotify:');
-    console.log(data);
+    console.log("Response " + response);
 
     var userId = data.id;
     console.log(userId);
@@ -269,9 +277,9 @@ async function createSpotifyPlaylist(userId, trackIdsArray, artist, accessToken)
         })
     });
 
-    const data = await response.json();
+    const data = response.json();
     console.log('Spotify:');
-    console.log(data);
+    console.log(response);
 
     var playlistId = data.id; 
 
@@ -300,7 +308,7 @@ async function addItemsToPlaylist(playlistId, userId, trackIdsArray, accessToken
         })
     });
 
-    const data = await response.json();
+    const data = response.json();
     console.log('Spotify:');
     console.log(data);
 
