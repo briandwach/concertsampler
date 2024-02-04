@@ -28,15 +28,30 @@
           </aside>
         <div>
             </aside>
-            <div id="calendar">
+            <div class="left-margin" id="calendar">
                 <label for="dateRange">Date Range:</label>
+                <div id="startDateContainer">
                 <input type="date" id="startDate" pattern="\d{4}-\d{2}-\d{2}" name="startDate" onchange="filterByDates(event);">
+            </div>
+            <div id="endDateContainer">
                 <input type="date" id="endDate" value="2024-11-01" pattern="\d{4}-\d{2}-\d{2}" name="endDate" onchange="filterByDates(event);">
             </div>
-        <p class="mainblurb">
+            </div>
+            <div class="mainblurb">
+        <p class="paragraph">
                 Travelling somewhere? Want to see a show? 
                 Let us know where you're going and we'll create a playlist with all your options!
             </p>
+            <p>
+            <input class="form-check-input" type="radio" name="radioNoLabel" id="radioNoLabel1" value="" aria-label="...">
+               Step 1. Enter and select the city you're traveling to</p>
+            <p>
+            <input class="form-check-input" type="radio" name="radioNoLabel" id="radioNoLabel1" value="" aria-label="..."> 
+                Step 2. Select the dates you'll be there</p>
+            <p>
+                <input class="form-check-input" type="radio" name="radioNoLabel" id="radioNoLabel1" value="" aria-label="..."> 
+                Step 3. Link your Spotify and enjoy you're personalized playlist!</p>
+        </div>
         </div>
     </div>
         <button id="authenticate"></button>
