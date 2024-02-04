@@ -1,5 +1,5 @@
 var authenticateEl = document.getElementById("authenticate");
-var refreshEl = document.getElementById("refresh");
+var loggedInEl = document.getElementById("loggedin");
 
 const JAMBASE_API_URL = "https://www.jambase.com/jb-api";
 const JAMBASE_API_KEY = "c06e8359-9476-484d-8390-20a1f50ca68d";
@@ -8,7 +8,7 @@ const JAMBASE_API_KEY = "c06e8359-9476-484d-8390-20a1f50ca68d";
 // clientID is specific to the registered application with Spotify
 const clientId = '2b183a70265148259c2caa4ab030b5ec';
 // Before pushing to main branch change the URL to the final project deployed URL
-const redirectUri = 'https://magicaryn.github.io/ConcertSampler/index.html';
+const redirectUri = 'http://127.0.0.1:5500/index.html';
 // ---------------------------------------------------------------------------
 
 var eventObj = {};
@@ -461,19 +461,25 @@ const getRefreshToken = async () => {
 };
 
 
+var logOut = function () {
+localStorage.clear();
+window.location.replace(redirectUri);
+}
 
 
-
-var checkUserAuthentification = function() {
-    var displayName = localStorage.getItem('display_name');
-    var test = localStorage.getItem("refresh_token");
-
-    if ((localStorage.getItem("refresh_token")) !== "undefined") {
-        getRefreshToken();
-        authenticateEl.textContent = ('Logged into Spotify as ' + displayName);
-    } else if (window.location.search !== '') {
-        getToken();
-        authenticateEl.textContent = ('Logged into Spotify as ' + displayName);   
+var checkUserAuthentification = async function() {
+    debugger;
+    
+    if ((localStorage.getItem("refresh_token")) !== "undefined" && localStorage.getItem("refresh_token") !== null) {
+        await getRefreshToken();
+        loggedInEl.textContent = ('Welcome, ' + localStorage.getItem('display_name') + '!');
+        authenticateEl.textContent = ('Click here to log out of Spotify');
+        authenticateEl.addEventListener('click', logOut);
+    } else if (window.location.search !== '' && !window.location.search.includes("error")) {
+        await getToken();
+        loggedInEl.textContent = ('Welcome, ' + localStorage.getItem('display_name') + '!');
+        authenticateEl.textContent = ('Click here to log out of Spotify');
+        authenticateEl.addEventListener('click', logOut);   
     } else {
         authenticateEl.textContent = ('Click here to link your Spotify account');
         authenticateEl.addEventListener('click', spotifyAuthentification);
