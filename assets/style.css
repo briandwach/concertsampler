@@ -37,8 +37,13 @@ li::marker {
 
 .mainblurb {
     font-size: x-large;
-    width: 40%;
-    margin-left: 35%;}
+    width: 45%;
+    margin-left: 40%;
+}
+
+.paragraph{
+    text-align: center;
+}
 
 
 button {
@@ -53,7 +58,6 @@ button {
 
 
 #calendar{
-    display: flex;
 }
 
 
@@ -70,6 +74,18 @@ button {
 #results-container{
 }
 
+#authenticate{
+
+}
+
+#startDate{
+
+}
+
+#endDate{
+
+}
+
 /* media queries */
 
 @media screen and (max-width: 700px) {
@@ -80,15 +96,60 @@ button {
 
     .mainblurb {
         position: relative;
-        z-index: 1;
+        width: fit-content;
         margin-left: 0%;
+        margin-right: 10%;
+        
     }
 
   aside {
         margin-right: 50px;
-        position: relative;
-        z-index: 2;
+        
+        
     }
 
+    main {
+        margin-right: 10%;
+    }
+
+    #authenticate{
+        width: 88%;
+        font-size: x-large;
+    }
+
+    #search{
+        font-size: x-large;
+        width: 88%;
+    }
+
+    #calendar{
+        flex-direction: column;
+        font-size: x-large;
+        
+        
+    }
+
+    
+
+    #startDateContainer{
+        padding-bottom: 10px;
+        
+    }
+    #startDate{
+        width: 88%;
+    }
+
+    #endDateContainer{
+        padding-bottom: 10px;
+        
+    }
+
+    #endDate{
+        width:88%;
+    }
+
+    #list-results{
+        font-size: larger;
+    }
 
 }
