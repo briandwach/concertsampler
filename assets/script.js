@@ -87,7 +87,7 @@ function getJambaseEventsByMetroID(metroId, metroName) {
 
     container.textContent = "";
 
-    sArr = [];
+    artistsArr = [];
 
     if (jsonObj.events != null) {
         for (var i = 0; i < jsonObj.events.length; ++i) {
