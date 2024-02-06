@@ -28,6 +28,7 @@ $(document).ready(function () {
     let todayDateString = todayDate.toISOString().split('T')[0];
 
     document.getElementById("startDate").value = todayDateString;
+    createTracksEl.addEventListener('click', onClickCreateAllTracksPlaylist);
 })
 
 function setCheckboxById(checkId) {
@@ -161,7 +162,7 @@ function searchMetros() {
 function filterByDates(e) {
     getJambaseEventsByMetroID(null);
     setCheckboxById("checkboxNoLabel3");
-    createTracksEl.style.display = 'block'; 
+    createTracksEl.style.display = 'block';
 }
 
 function createAllTracksPlaylist() {
@@ -307,6 +308,10 @@ function iframePlaylist(playlistId, accessToken) {
     "allow='autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture' " +
     "loading='lazy'><br />");
 
+    createTracksEl.textContent = ('Start New Search');
+    createTracksEl.removeEventListener('click', onClickCreateAllTracksPlaylist);
+    createTracksEl.addEventListener('click', startNewSearch);
+
     unfollowEl = document.getElementById("unfollow");
     unfollowEl.addEventListener('click', function(){unfollowPlaylist(playlistId, accessToken);});
 }
@@ -322,8 +327,12 @@ async function unfollowPlaylist(playlistId, accessToken) {
     
     let container = document.getElementById("playlistiframe");
     var removePlaylistEl = document.createElement('p');
-    removePlaylistEl.textContent = ("CONFIRMED: Playlist has been removed from your library");
+    removePlaylistEl.textContent = ("Playlist has been removed from your library");
     container.replaceChild(removePlaylistEl, unfollowEl);
+}
+
+function startNewSearch() {
+    window.location.replace(redirectUri);
 }
 
 // Spotify Authentification
