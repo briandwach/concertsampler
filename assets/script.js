@@ -1,7 +1,9 @@
 var authenticateEl = document.getElementById("authenticate");
 var loggedInEl = document.getElementById("loggedin");
+var searchEl = document.getElementById("search");
 var unfollowEl; 
 var createTracksEl = document.getElementById("createtracks");
+var radioTrackerEl = document.getElementById("radio-checker");
 
 const JAMBASE_API_URL = "https://www.jambase.com/jb-api";
 const JAMBASE_API_KEY = "c06e8359-9476-484d-8390-20a1f50ca68d";
@@ -28,7 +30,7 @@ $(document).ready(function () {
     let todayDateString = todayDate.toISOString().split('T')[0];
 
     document.getElementById("startDate").value = todayDateString;
-    
+    radioTrackerEl.style.display = "block";
 })
 
 function setCheckboxById(checkId) {
@@ -245,6 +247,9 @@ async function getSpotifyArtistTopTracks(artistID, accessToken, createPlaylist) 
 
 async function getSpotifyUserID(trackIdsArray, accessToken) {
 
+    document.getElementById("calendar").style.display = "none";
+    radioTrackerEl.style.display = "none";
+
     let container = document.getElementById("results-container");
 
     const response = await fetch('https://api.spotify.com/v1/me', {
@@ -311,7 +316,7 @@ async function addItemsToPlaylist(playlistId, trackIdsArray, accessToken) {
     const data = await response.json();
 
     let container = document.getElementById("results-container");
-    container.innerHTML += ('<li>Good news!  Your playlist has been created.  It has been added to your Spotify library and you can also listen below.</li>');
+    container.innerHTML += ('<li>Good news!  Your playlist has been created.  It has been added to your Spotify library and you can listen now below.</li>');
 
     iframePlaylist(playlistId, accessToken);
 }
@@ -512,17 +517,21 @@ var checkUserAuthentification = async function() {
         await getRefreshToken();
         loggedInEl.textContent = ('Welcome, ' + localStorage.getItem('display_name') + '!');
         authenticateEl.textContent = ('Click here to log out of Spotify');
+        searchEl.style.display = "block";
         setCheckboxById("checkboxNoLabel1");
         authenticateEl.addEventListener('click', logOut);
     } else if (window.location.search !== '' && !window.location.search.includes("error")) {
         await getToken();
         loggedInEl.textContent = ('Welcome, ' + localStorage.getItem('display_name') + '!');
         authenticateEl.textContent = ('Click here to log out of Spotify');
+        searchEl.style.display = "block";
         setCheckboxById("checkboxNoLabel1");
         authenticateEl.addEventListener('click', logOut);   
     } else {
+        searchEl.style.display = "none";
         authenticateEl.textContent = ('Click here to link your Spotify account');
         authenticateEl.addEventListener('click', spotifyAuthentification);
+        
     };
 };
 
