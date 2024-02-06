@@ -12,10 +12,9 @@
             crossorigin="anonymous"
         >
         <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Oregano&display=swap" rel="stylesheet">
-<link href="https://fonts.googleapis.com/css2?family=Oregano&family=Protest+Riot&display=swap" rel="stylesheet">
-
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Oregano&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Oregano&family=Protest+Riot&display=swap" rel="stylesheet">
         <link rel="stylesheet" href="assets/style.css">
     </head>
     <body>
@@ -33,19 +32,24 @@
                 <button value="Create All Tracks" onclick="onClickCreateAllTracksPlaylist()">Create All Tracks</button>
             </p>
             </div>
-            <div class="flex">
-                <aside id="search">
-                    <nav class="flex">
-                        <input
-                            type="text"
-                            id="textSearch"
-                            onkeypress="searchMetros()"
-                            placeholder="Enter City"
-                        >
-                        <button onclick="searchMetros()">Search</button>
-                    </nav>
-                </aside>
-             
+            <div class="inline" id="selection">
+                <div class="block">
+                    <div class="block" id="spotify">
+                        <p id="loggedin"></p>
+                        <button id="authenticate"></button>
+                    </div>
+                    <aside class="block" id="search">
+                        <nav class="flex">
+                            <input
+                                type="text"
+                                id="textSearch"
+                                onkeypress="searchMetros()"
+                                placeholder="Enter City"
+                            >
+                            <button onclick="searchMetros()">Search</button>
+                        </nav>
+                    </aside>
+                </div>
                 <div class="inline">
                     <div class="inline" id="calendar">
                         <label for="dateRange">Date Range:</label>
@@ -90,23 +94,21 @@
                 </div>
             </div>
         </div>
-        <div id="spotify">
-            <p id="loggedin"></p>
-            <button id="authenticate"></button>
-        </div>
-        <div id="list-results">
-            <!-- <button></button> -->
-            <link id="spotify-login">
-            <!-- LOGIN PLACEHOLDER-->
-            <ul id="results-container"></ul>
-        </div>
-        <div id="playlistiframe"></div>
-    </main>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.7/dist/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-    <script src="assets/script.js"></script>
+    </div>
+</div>
+<div id="list-results">
+    <!-- <button></button> -->
+    <link id="spotify-login">
+    <!-- LOGIN PLACEHOLDER-->
+    <ul id="results-container"></ul>
+</div>
+<div id="playlistiframe"></div>
+</main>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.7/dist/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="assets/script.js"></script>
 </body>
 </html>
