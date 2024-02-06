@@ -100,7 +100,7 @@ function getJambaseEventsByMetroID(metroId) {
         }
     }
 
-    setCheckboxById("checkboxNoLabel1");
+    setCheckboxById("checkboxNoLabel2");
 }
 
 function processJambaseEventsResponse(response) {
@@ -124,7 +124,7 @@ function getJambasePerformers(eventId) {
         }
     }
 
-    setCheckboxById("checkboxNoLabel2");
+    setCheckboxById("checkboxNoLabel3");
 }
 
 function searchMetros() {
@@ -277,7 +277,7 @@ async function createSpotifyPlaylist(userId, trackIdsArray, artist, accessToken)
 
     addItemsToPlaylist(playlistId, userId, trackIdsArray, accessToken);
 
-    setCheckboxById("checkboxNoLabel3");
+    setCheckboxById("checkboxNoLabel1");
 }
 
 async function addItemsToPlaylist(playlistId, userId, trackIdsArray, accessToken) {
