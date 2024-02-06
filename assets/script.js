@@ -9,8 +9,8 @@ const JAMBASE_API_KEY = "c06e8359-9476-484d-8390-20a1f50ca68d";
 // clientID is specific to the registered application with Spotify
 const clientId = '2b183a70265148259c2caa4ab030b5ec';
 // Before pushing to main branch change the URL to the final project deployed URL
-const redirectUri = 'https://magicaryn.github.io/ConcertSampler/index.html';
-//const redirectUri = 'http://127.0.0.1:5500/index.html';
+   // const redirectUri = 'https://magicaryn.github.io/ConcertSampler/index.html';
+ const redirectUri = 'http://127.0.0.1:5500/index.html';
 // ---------------------------------------------------------------------------
 
 var eventObj = {};
@@ -66,17 +66,11 @@ function getJambaseEventsByMetroID(metroId) {
     let startDate = document.getElementById("startDate").value;
     let endDate = document.getElementById("endDate").value;
 
-    console.log("startDate: " + startDate);
-
     let URL = JAMBASE_API_URL + "/v1/events" + "?apikey=" + JAMBASE_API_KEY + "&geoMetroId=" + cachedMetroId + "&eventDateFrom=" + startDate + "&eventDateTo=" + endDate;
-
-    console.log("URL: " + URL);
 
     let response = httpGet(URL);
 
     let jsonObj = JSON.parse(response);
-
-    console.log("RESPONSE EVENTS: " + response);
 
     eventObj = jsonObj;
 
@@ -119,7 +113,7 @@ function getJambasePerformers(eventId) {
         if (eventObj.events[i].identifier === eventId) {
             for (var j = 0; j < eventObj.events[i].performer.length; ++j) {
                 artistsArr.push(eventObj.events[i].performer[j].name);
-                container.innerHTML += "<li onclick=\"searchForSpotifyArtist('" + eventObj.events[i].performer[j].name + "')\">" + eventObj.events[i].performer[j].name + "</li>"
+                container.innerHTML += "<li onclick=\"searchForSpotifyArtist('" + eventObj.events[i].performer[j].name + "', true)\">" + eventObj.events[i].performer[j].name + "</li>"
             }
         }
     }
@@ -128,7 +122,6 @@ function getJambasePerformers(eventId) {
 }
 
 function onClickCreateAllTracksPlaylist() {
-    console.log("Calling createAllTracksPlaylist()");
     createAllTracksPlaylist();
 }
 
@@ -171,9 +164,9 @@ function createAllTracksPlaylist() {
     var i = 0;
     var lastArtist = "";
     for (i = 0; i < artistsArr.length; ++i) {
-        console.log("Getting top tracks for: " + artistsArr[i].name) + " index: " + i;
-        if (i == artistsArr.length - 1) {
+        if (i == artistsArr.length - 1 || i == 30) {
             searchForSpotifyArtist(artistsArr[i], true);
+            break;
         } else {
             searchForSpotifyArtist(artistsArr[i], false);
         }
@@ -193,13 +186,14 @@ async function searchForSpotifyArtist(artist, createPlaylist) {
     });
 
     const data = await response.json();
-    console.log('Spotify artist: ' + artist);
-    console.log("Response for artist: " + artist + " : " + response);   
-    console.log("Artist ID: " + data.artists.items[0].id);
     
-    var spotifyArtistId = (data.artists.items[0].id);
+    if (data.artists == null) {
+        console.log("Artist can not be found")
+    } else {
+        var spotifyArtistId = (data.artists.items[0].id);
 
-    getSpotifyArtistTopTracks(spotifyArtistId, artist, accessToken, createPlaylist);
+        getSpotifyArtistTopTracks(spotifyArtistId, artist, accessToken, createPlaylist);
+    }
 
 };
 
@@ -209,9 +203,6 @@ async function getSpotifyArtistTopTracks(artistID, artist, accessToken, createPl
 
     container.textContent = "";
 
-    //container.innerHTML += ('<li>' + artist + '</li>');
-    //container.innerHTML += ('<li></li>');
-
     const response = await fetch('https://api.spotify.com/v1/artists/' + artistID + '/top-tracks?market=US', {
         method: 'GET',
         headers: {
@@ -220,22 +211,15 @@ async function getSpotifyArtistTopTracks(artistID, artist, accessToken, createPl
     });
 
     const data = await response.json();
-    console.log('Spotify:');
-    console.log("Tracks data: " + data);
     
     var trackIdsArray = [];
 
-    for (var t = 0; t < data.tracks.length; t++) {
-        //container.innerHTML += ("<li>Track name: " + data.tracks[t].name + "</li><li>Track Spotify ID:" + data.tracks[t].id + "</li>");
+    for (var t = 0; data.tracks != null && t < 3; t++) {
         trackIdsArray[t] = data.tracks[t].id;
         allTracksArr.push(data.tracks[t].id);
     };
-    
-    console.log(trackIdsArray);
 
-    console.log("createPlaylist: " + createPlaylist)
     if (createPlaylist) {
-        console.log("Calling getSpotifyUserID");
         getSpotifyUserID(allTracksArr, artist, accessToken);
     }
 }
@@ -243,8 +227,6 @@ async function getSpotifyArtistTopTracks(artistID, artist, accessToken, createPl
 async function getSpotifyUserID(trackIdsArray, artist, accessToken) {
 
     let container = document.getElementById("results-container");
-    //container.innerHTML += ('<li></li>');
-
 
     const response = await fetch('https://api.spotify.com/v1/me', {
         method: 'GET',
@@ -254,11 +236,9 @@ async function getSpotifyUserID(trackIdsArray, artist, accessToken) {
     });
 
     const data = await response.json();
-    console.log('Spotify:');
-    console.log("Response " + response);
 
     var userId = data.id;
-    console.log(userId);
+    
     container.innerHTML += ('<li>Hello ' + data.display_name + '!</li>');
 
     createSpotifyPlaylist(userId, trackIdsArray, artist, accessToken);
@@ -278,8 +258,6 @@ async function createSpotifyPlaylist(userId, trackIdsArray, artist, accessToken)
     });
 
     const data = await response.json();
-    console.log('Spotify:');
-    console.log(response);
 
     var playlistId = data.id; 
 
@@ -296,9 +274,6 @@ async function addItemsToPlaylist(playlistId, userId, trackIdsArray, accessToken
         trackIdsUris[i] = ("spotify:track:" + trackIdsArray[i]);
     };
 
-    console.log("JSON Array for adding to playlist:");
-    console.log(trackIdsUris);
-
     const response = await fetch('https://api.spotify.com/v1/playlists/' + playlistId + '/tracks', {
         method: 'POST',
         headers: {
@@ -309,8 +284,6 @@ async function addItemsToPlaylist(playlistId, userId, trackIdsArray, accessToken
     });
 
     const data = await response.json();
-    console.log('Spotify:');
-    console.log(data);
 
     let container = document.getElementById("results-container");
     container.innerHTML += ('<li>Good news!  Your playlist has been created.  It has been added to your Spotify library and can also be listened to here.</li>');
@@ -332,7 +305,7 @@ function iframePlaylist(playlistId, accessToken) {
     "loading='lazy'><br />" +
     "<button id='unfollow'>Click here to remove playlist from your library</button>");
 
-    unfollowEl.addEventListener('click', unfollowPlaylist(playlistId, accessToken));
+    // unfollowEl.addEventListener('click', unfollowPlaylist(playlistId, accessToken));
 }
 
 async function unfollowPlaylist(playlistId, accessToken) {
