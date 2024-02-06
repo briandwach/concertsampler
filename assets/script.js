@@ -13,8 +13,8 @@ const JAMBASE_API_KEY = "c06e8359-9476-484d-8390-20a1f50ca68d";
 // clientID is specific to the registered application with Spotify
 const clientId = '2b183a70265148259c2caa4ab030b5ec';
 // Before pushing to main branch change the URL to the final project deployed URL
-// const redirectUri = 'https://magicaryn.github.io/ConcertSampler/index.html';
-const redirectUri = 'http://127.0.0.1:5500/index.html';
+const redirectUri = 'https://magicaryn.github.io/ConcertSampler/index.html';
+// const redirectUri = 'http://127.0.0.1:5500/index.html';
 // ---------------------------------------------------------------------------
 
 var eventObj = {};
@@ -87,7 +87,7 @@ function getJambaseEventsByMetroID(metroId, metroName) {
 
     container.textContent = "";
 
-    artistsArr = [];
+    sArr = [];
 
     if (jsonObj.events != null) {
         for (var i = 0; i < jsonObj.events.length; ++i) {
