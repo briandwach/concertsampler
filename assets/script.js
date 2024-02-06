@@ -75,7 +75,7 @@ function getJambaseEventsByMetroID(metroId, metroName) {
     let startDate = document.getElementById("startDate").value;
     let endDate = document.getElementById("endDate").value;
 
-    let URL = JAMBASE_API_URL + "/v1/events" + "?apikey=" + JAMBASE_API_KEY + "&geoMetroId=" + cachedMetroId + "&eventDateFrom=" + startDate + "&eventDateTo=" + endDate;
+    let URL = JAMBASE_API_URL + "/v1/events?perPage=100" + "&apikey=" + JAMBASE_API_KEY + "&geoMetroId=" + cachedMetroId + "&eventDateFrom=" + startDate + "&eventDateTo=" + endDate;
 
     let response = httpGet(URL);
 
@@ -167,8 +167,12 @@ function filterByDates(e) {
     var formatStartDate = document.getElementById("startDate").value;
     var formatEndDate = document.getElementById("endDate").value;
 
+    if (formatEndDate == '') {
+        formatEndDate = 'Onward';
+    } else {
     formatStartDate = formatDates(formatStartDate);
     formatEndDate = formatDates(formatEndDate);
+    }
 
     localStorage.setItem('Start Date', formatStartDate);
     localStorage.setItem('End Date', formatEndDate);
@@ -184,8 +188,12 @@ function formatDates(dateParam) {
 }
 
 function createAllTracksPlaylist() {
+
+artistsArr = removeDuplicates(artistsArr);
+
+
    for (i = 0; i < artistsArr.length; ++i) {
-        if (i == artistsArr.length - 1 || i == 30) {
+        if (i == artistsArr.length - 1 || i == 33) {
             searchForSpotifyArtist(artistsArr[i], true);
             break;
         } else {
@@ -193,6 +201,17 @@ function createAllTracksPlaylist() {
         }
     }
 }
+
+function removeDuplicates(arr) {
+    let newArr = [];
+    for (let i = 0; i < arr.length; i++) {
+      if (!newArr.includes(arr[i])) {
+        newArr.push(arr[i]);
+      }
+    }
+    return newArr;
+  }
+
 
 // Spotify API Functions // Spotify API Functions // Spotify API Functions // Spotify API Functions // Spotify API Functions // Spotify API Functions
 
