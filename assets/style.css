@@ -23,6 +23,11 @@ main {
     display: flex;
 }
 
+.block{
+    display: block;
+    width: fit-content;
+}
+
 li::marker {
     color: rgb(227, 209, 209);
 }
@@ -39,7 +44,7 @@ li::marker {
     font-size: x-large;
 margin: auto;
 padding: 30px;
-font-family: 'Protest Riot', sans-serif;;
+font-family: 'Protest Riot', sans-serif;
 
 }
 
@@ -63,11 +68,15 @@ button {
 
 #calendar {
     float: left;
+    border-bottom: 2px solid #ff0062;
+    padding-bottom: 30px;
+    margin-bottom: 20px;
 }
 
 #radio-checker { 
 float: right;
-margin-left: 60px;
+margin-left: 75px;
+font-family: 'Protest Riot', sans-serif;
 }
 
 .hidden {
@@ -77,9 +86,9 @@ margin-left: 60px;
 .show {
     display: all;
 }
-
-/* media queries */
-
+#spotify{
+    margin-bottom: 40px;
+}
 
 
 /* The container */
