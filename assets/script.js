@@ -2,7 +2,7 @@ var authenticateEl = document.getElementById("authenticate");
 var loggedInEl = document.getElementById("loggedin");
 var searchEl = document.getElementById("search");
 var cityNameEl = document.getElementById("metrolabel");
-var unfollowEl; 
+var unfollowEl;
 var createTracksEl = document.getElementById("createtracks");
 var radioTrackerEl = document.getElementById("radio-checker");
 
@@ -14,7 +14,7 @@ const JAMBASE_API_KEY = "c06e8359-9476-484d-8390-20a1f50ca68d";
 const clientId = '2b183a70265148259c2caa4ab030b5ec';
 // Before pushing to main branch change the URL to the final project deployed URL
 const redirectUri = 'https://magicaryn.github.io/ConcertSampler/index.html';
-//  const redirectUri = 'http://127.0.0.1:5500/index.html';
+// const redirectUri = 'http://127.0.0.1:5500/index.html';
 // ---------------------------------------------------------------------------
 
 var eventObj = {};
@@ -67,7 +67,7 @@ function getJambaseEventsByMetroID(metroId, metroName) {
         cityNameEl.textContent = metroName;
     }
 
-    
+
 
     document.getElementById("search").style.display = "none";
     document.getElementById("calendar").style.display = "block";
@@ -75,7 +75,7 @@ function getJambaseEventsByMetroID(metroId, metroName) {
     let startDate = document.getElementById("startDate").value;
     let endDate = document.getElementById("endDate").value;
 
-    let URL = JAMBASE_API_URL + "/v1/events" + "?apikey=" + JAMBASE_API_KEY + "&geoMetroId=" + cachedMetroId + "&eventDateFrom=" + startDate + "&eventDateTo=" + endDate;
+    let URL = JAMBASE_API_URL + "/v1/events?perPage=100" + "&apikey=" + JAMBASE_API_KEY + "&geoMetroId=" + cachedMetroId + "&eventDateFrom=" + startDate + "&eventDateTo=" + endDate;
 
     let response = httpGet(URL);
 
@@ -87,7 +87,7 @@ function getJambaseEventsByMetroID(metroId, metroName) {
 
     container.textContent = "";
 
-    artistsArr = [];
+    sArr = [];
 
     if (jsonObj.events != null) {
         for (var i = 0; i < jsonObj.events.length; ++i) {
@@ -155,7 +155,7 @@ function searchMetros() {
             //container.innerHTML += "<li class=\"" + cssClass + "\" onclick=\"getJambaseEventsByMetroID('" + jsonMetroObj.metros[i].identifier + "')\">" + jsonMetroObj.metros[i].name + " ~ " + jsonMetroObj.metros[i].address.addressRegion + "</li>";
             container.innerHTML += "<li id='eventslist' class=\"" + cssClass + "\" onclick=\"getJambaseEventsByMetroID('" + jsonMetroObj.metros[i].identifier + "', '" + jsonMetroObj.metros[i].name + "')\">" + jsonMetroObj.metros[i].name + " ~ " + jsonMetroObj.metros[i].address.addressRegion + "</li>";
         }
-    }    
+    }
 
     return resultsArr;
 }
@@ -167,8 +167,12 @@ function filterByDates(e) {
     var formatStartDate = document.getElementById("startDate").value;
     var formatEndDate = document.getElementById("endDate").value;
 
+    if (formatEndDate == '') {
+        formatEndDate = 'Onward';
+    } else {
     formatStartDate = formatDates(formatStartDate);
     formatEndDate = formatDates(formatEndDate);
+    }
 
     localStorage.setItem('Start Date', formatStartDate);
     localStorage.setItem('End Date', formatEndDate);
@@ -184,10 +188,12 @@ function formatDates(dateParam) {
 }
 
 function createAllTracksPlaylist() {
-    var i = 0;
-    var lastArtist = "";
-    for (i = 0; i < artistsArr.length; ++i) {
-        if (i == artistsArr.length - 1 || i == 30) {
+
+artistsArr = removeDuplicates(artistsArr);
+
+
+   for (i = 0; i < artistsArr.length; ++i) {
+        if (i == artistsArr.length - 1 || i == 33) {
             searchForSpotifyArtist(artistsArr[i], true);
             break;
         } else {
@@ -195,6 +201,17 @@ function createAllTracksPlaylist() {
         }
     }
 }
+
+function removeDuplicates(arr) {
+    let newArr = [];
+    for (let i = 0; i < arr.length; i++) {
+      if (!newArr.includes(arr[i])) {
+        newArr.push(arr[i]);
+      }
+    }
+    return newArr;
+  }
+
 
 // Spotify API Functions // Spotify API Functions // Spotify API Functions // Spotify API Functions // Spotify API Functions // Spotify API Functions
 
@@ -209,15 +226,21 @@ async function searchForSpotifyArtist(artist, createPlaylist) {
     });
 
     const data = await response.json();
-    
-    if (data.artists == null) {
-        console.log("Artist can not be found")
+
+
+    if (createPlaylist) {
+    if (data.artists.items[0].name !== artist) {
+        getSpotifyUserID(allTracksArr, accessToken);
     } else {
         var spotifyArtistId = (data.artists.items[0].id);
-
         getSpotifyArtistTopTracks(spotifyArtistId, accessToken, createPlaylist);
     }
-
+    } else if (data.artists.items[0].name !== artist) {
+        return;
+    } else {
+        var spotifyArtistId = (data.artists.items[0].id);
+        getSpotifyArtistTopTracks(spotifyArtistId, accessToken, createPlaylist);
+    }
 };
 
 
@@ -234,18 +257,20 @@ async function getSpotifyArtistTopTracks(artistID, accessToken, createPlaylist) 
     });
 
     const data = await response.json();
-    
+
     var trackIdsArray = [];
 
-    for (var t = 0; data.tracks != null && t < 3; t++) {
-        trackIdsArray[t] = data.tracks[t].id;
-        allTracksArr.push(data.tracks[t].id);
+    for (var t = 0; t < 3; t++) {
+        if (data.tracks[t] != 'undefined' && data.tracks[t] != null) {
+            trackIdsArray[t] = data.tracks[t].id;
+            allTracksArr.push(data.tracks[t].id);
+        };
     };
 
     if (createPlaylist) {
         getSpotifyUserID(allTracksArr, accessToken);
     }
-}
+};
 
 async function getSpotifyUserID(trackIdsArray, accessToken) {
 
@@ -264,13 +289,13 @@ async function getSpotifyUserID(trackIdsArray, accessToken) {
     const data = await response.json();
 
     var userId = data.id;
-    
+
     createSpotifyPlaylist(userId, trackIdsArray, accessToken);
 };
 
 async function createSpotifyPlaylist(userId, trackIdsArray, accessToken) {
 
-    var dateRange= "";
+    var dateRange = "";
 
     if (localStorage.getItem('Start Date') === localStorage.getItem('End Date')) {
         dateRange = localStorage.getItem('Start Date');
@@ -282,7 +307,7 @@ async function createSpotifyPlaylist(userId, trackIdsArray, accessToken) {
         method: 'POST',
         headers: {
             Authorization: 'Bearer ' + accessToken,
-        }, body:JSON.stringify({
+        }, body: JSON.stringify({
             "name": localStorage.getItem('Metro Name') + " " + dateRange + " from Concert Sampler",
             "description": "Created by Concert Sampler web application",
             "public": true
@@ -291,11 +316,11 @@ async function createSpotifyPlaylist(userId, trackIdsArray, accessToken) {
 
     const data = await response.json();
 
-    var playlistId = data.id; 
+    var playlistId = data.id;
 
     addItemsToPlaylist(playlistId, trackIdsArray, accessToken);
 
-    
+
 }
 
 async function addItemsToPlaylist(playlistId, trackIdsArray, accessToken) {
@@ -310,7 +335,7 @@ async function addItemsToPlaylist(playlistId, trackIdsArray, accessToken) {
         method: 'POST',
         headers: {
             Authorization: 'Bearer ' + accessToken,
-        }, body:JSON.stringify({
+        }, body: JSON.stringify({
             "uris": trackIdsUris
         })
     });
@@ -325,24 +350,24 @@ async function addItemsToPlaylist(playlistId, trackIdsArray, accessToken) {
 
 
 function iframePlaylist(playlistId, accessToken) {
- let container = document.getElementById("playlistiframe");
-    container.innerHTML += ("<button id='unfollow'>Click here to remove playlist from your library</button>" + 
-    "<iframe " + 
-    "style='border-radius:12px' " +
-    "src=https://open.spotify.com/embed/playlist/" + playlistId + "?utm_source=generator&theme=0 " +
-    "width='100%' " +
-    "height='625' " +
-    "frameBorder='0' " +
-    "allowfullscreen='' " +
-    "allow='autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture' " +
-    "loading='lazy'><br />");
+    let container = document.getElementById("playlistiframe");
+    container.innerHTML += ("<button id='unfollow'>Click here to remove playlist from your library</button>" +
+        "<iframe " +
+        "style='border-radius:12px' " +
+        "src=https://open.spotify.com/embed/playlist/" + playlistId + "?utm_source=generator&theme=0 " +
+        "width='100%' " +
+        "height='625' " +
+        "frameBorder='0' " +
+        "allowfullscreen='' " +
+        "allow='autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture' " +
+        "loading='lazy'><br />");
 
     createTracksEl.textContent = ('Start New Search');
     createTracksEl.removeEventListener('click', createAllTracksPlaylist);
     createTracksEl.addEventListener('click', startNewSearch);
 
     unfollowEl = document.getElementById("unfollow");
-    unfollowEl.addEventListener('click', function(){unfollowPlaylist(playlistId, accessToken);});
+    unfollowEl.addEventListener('click', function () { unfollowPlaylist(playlistId, accessToken); });
 }
 
 async function unfollowPlaylist(playlistId, accessToken) {
@@ -353,7 +378,7 @@ async function unfollowPlaylist(playlistId, accessToken) {
             Authorization: 'Bearer ' + accessToken
         }
     });
-    
+
     let container = document.getElementById("playlistiframe");
     var removePlaylistEl = document.createElement('p');
     removePlaylistEl.textContent = ("Playlist has been removed from your library");
@@ -509,12 +534,12 @@ const getRefreshToken = async () => {
 
 
 var logOut = function () {
-localStorage.clear();
-window.location.replace(redirectUri);
+    localStorage.clear();
+    window.location.replace(redirectUri);
 }
 
 
-var checkUserAuthentification = async function() {
+var checkUserAuthentification = async function () {
     if ((localStorage.getItem("refresh_token")) !== "undefined" && localStorage.getItem("refresh_token") !== null) {
         await getRefreshToken();
         loggedInEl.textContent = ('Welcome, ' + localStorage.getItem('display_name') + '!');
@@ -528,12 +553,12 @@ var checkUserAuthentification = async function() {
         authenticateEl.textContent = ('Click here to log out of Spotify');
         searchEl.style.display = "block";
         setCheckboxById("checkboxNoLabel1");
-        authenticateEl.addEventListener('click', logOut);   
+        authenticateEl.addEventListener('click', logOut);
     } else {
         searchEl.style.display = "none";
         authenticateEl.textContent = ('Click here to link your Spotify account');
         authenticateEl.addEventListener('click', spotifyAuthentification);
-        
+
     };
 };
 
