@@ -16,7 +16,7 @@ header img {
 
 main {
     margin-left: 10%;
-    margin-right: 10%;
+    margin-right: 5%;
 }
 
 .flex {
@@ -26,6 +26,7 @@ main {
 .block{
     display: block;
     width: fit-content;
+    
 }
 
 #eventslist:hover {
@@ -45,7 +46,7 @@ li::marker {
 }
 
 .mainblurb {
-    font-size: x-large;
+font-size: x-large;
 margin: auto;
 padding: 30px;
 font-family: 'Protest Riot', sans-serif;
@@ -67,6 +68,8 @@ button {
 
 .inline {
   display: inline-block;
+  
+
 }
 
 
@@ -81,6 +84,7 @@ button {
 float: right;
 margin-left: 75px;
 font-family: 'Protest Riot', sans-serif;
+width: fit-content;
 }
 
 
@@ -102,6 +106,7 @@ label:hover {
 
 #createtracks {
     display: none;
+    width: fit-content;
 }
 
 
@@ -172,12 +177,24 @@ label:hover {
     transform: rotate(45deg);
   }
 
+  #search{
+
+  }
+
   #unfollow {
     margin-bottom: 10px;
   }
 
   @media screen and (max-width: 700px) {
 
+    main {
+        margin-left: 8%;
+
+    }
+
+    .center{
+        justify-content: center;
+    }
     header {
         font-size: 45px;
     }
@@ -194,6 +211,12 @@ label:hover {
             margin-right: 10%;
             
         }
+
+        .inline{
+            display: inline-block;
+        }
+
+        
     
       aside {
             margin-right: 50px;
@@ -204,10 +227,16 @@ label:hover {
         main {
             margin-right: 10%;
         }
+
+        #radio-checker{
+            margin-left: 5%;
+            float: none;
+        }
     
         #authenticate{
             width: 88%;
             font-size: x-large;
+            margin-left: 5%;
         }
     
         #search{
@@ -216,9 +245,9 @@ label:hover {
         }
     
         #calendar{
-            flex-direction: column;
             font-size: x-large;
-            margin: auto;
+            display: block;
+            flex-direction: column;
             
             
         }
@@ -226,16 +255,23 @@ label:hover {
     
         #startDateContainer{
             padding-bottom: 10px;
+            display: block;
+            flex-direction: column;
             
         }
+
+        #endDateContainer{
+            padding-bottom: 10px;
+            display: block;
+            flex-direction: column;
+            
+        }
+
         #startDate{
             width: 88%;
         }
     
-        #endDateContainer{
-            padding-bottom: 10px;
-            
-        }
+       
     
         #endDate{
             width:88%;

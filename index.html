@@ -26,7 +26,28 @@
                 Travelling somewhere? Want to see a show?
                 Let us know where you're going and we'll create a playlist with all your options!
             </p>
+
         </div>
+
+        <div class="inline" id="radio-checker">
+
+            <label class="container">
+                Step 1. Link your Spotify
+                <input type="checkbox" id="checkboxNoLabel1" disabled="true">
+                <span class="checkmark"></span>
+            </label>
+            <label class="container">
+                Step 2. Enter and click the city you're traveling to
+                <input type="checkbox" id="checkboxNoLabel2" disabled="true">
+                <span class="checkmark"></span>
+            </label>
+            <label class="container">
+                Step 3. Select the dates you'll be there and create your personalized playlist!
+                <input type="checkbox" id="checkboxNoLabel3" disabled="true">
+                <span class="checkmark"></span>
+            </label>
+        </div>
+        
         <div class="inline">
             <div class="inline">
                 <div class="block">
@@ -34,46 +55,29 @@
                         <p id="loggedin"></p>
                         <button id="authenticate"></button>
                     </div>
-                    <aside class="block" id="search">
-                        <nav class="flex">
+                    <div class="block" id="search">
+                        <div class="flex">
                             <input type="text" id="textSearch" onkeypress="searchMetros()" placeholder="Enter City">
                             <button onclick="searchMetros()">Search</button>
-                        </nav>
-                    </aside>
+                    </div>
+                    </div>
                 </div>
-                <div class="inline">
-                    <div class="inline" id="calendar">
-                        <p id="metrolabel"></p>
+                <div class="center" id="calendar">
+                    <div id="calendar">
                         <label for="dateRange">Date Range:</label>
-                        <div class="inline" id="startDateContainer">
+                        <div class="block" id="startDateContainer">
                             <input type="date" id="startDate" pattern="\d{4}-\d{2}-\d{2}" name="startDate"
                                 onchange="filterByDates(event);">
                         </div>
-                        <div class="inline" id="endDateContainer">
+                        <div class="block" id="endDateContainer">
                             <input type="date" id="endDate" pattern="\d{4}-\d{2}-\d{2}" name="endDate"
                                 onchange="filterByDates(event);">
                         </div>
                     </div>
+                    <p id="metrolabel"></p>
                 </div>
             </div>
-            <div class="inline" id="radio-checker">
-
-                <label class="container">
-                    Step 1. Link your Spotify
-                    <input type="checkbox" id="checkboxNoLabel1" disabled="true">
-                    <span class="checkmark"></span>
-                </label>
-                <label class="container">
-                    Step 2. Enter and click the city you're traveling to
-                    <input type="checkbox" id="checkboxNoLabel2" disabled="true">
-                    <span class="checkmark"></span>
-                </label>
-                <label class="container">
-                    Step 3. Select the dates you'll be there and then create your personalized playlist!
-                    <input type="checkbox" id="checkboxNoLabel3" disabled="true">
-                    <span class="checkmark"></span>
-                </label>
-            </div>
+            
             <p>
                 <button value="Create All Tracks" id="createtracks">Create Playlist</button>
             </p>

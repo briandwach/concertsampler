@@ -31,7 +31,7 @@ $(document).ready(function () {
     let todayDateString = todayDate.toISOString().split('T')[0];
 
     document.getElementById("startDate").value = todayDateString;
-    radioTrackerEl.style.display = "block";
+    radioTrackerEl.style.display = "flex-block";
 })
 
 function setCheckboxById(checkId) {
@@ -70,7 +70,7 @@ function getJambaseEventsByMetroID(metroId, metroName) {
 
 
     document.getElementById("search").style.display = "none";
-    document.getElementById("calendar").style.display = "block";
+    document.getElementById("calendar").style.display = "inline";
 
     let startDate = document.getElementById("startDate").value;
     let endDate = document.getElementById("endDate").value;
