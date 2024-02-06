@@ -28,6 +28,10 @@ main {
     width: fit-content;
 }
 
+#eventslist:hover {
+    cursor: pointer;
+}
+
 li::marker {
     color: rgb(227, 209, 209);
 }
@@ -77,6 +81,10 @@ button {
 float: right;
 margin-left: 75px;
 font-family: 'Protest Riot', sans-serif;
+}
+
+label:hover {
+    cursor: text;
 }
 
 .hidden {
@@ -164,6 +172,10 @@ font-family: 'Protest Riot', sans-serif;
     -webkit-transform: rotate(45deg);
     -ms-transform: rotate(45deg);
     transform: rotate(45deg);
+  }
+
+  #unfollow {
+    margin-bottom: 10px;
   }
 
   @media screen and (max-width: 700px) {

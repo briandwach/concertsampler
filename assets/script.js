@@ -1,6 +1,6 @@
 var authenticateEl = document.getElementById("authenticate");
 var loggedInEl = document.getElementById("loggedin");
-var unfollowEl = document.getElementById("unfollow");
+var unfollowEl; 
 var createTracksEl = document.getElementById("createtracks");
 
 const JAMBASE_API_URL = "https://www.jambase.com/jb-api";
@@ -10,8 +10,8 @@ const JAMBASE_API_KEY = "c06e8359-9476-484d-8390-20a1f50ca68d";
 // clientID is specific to the registered application with Spotify
 const clientId = '2b183a70265148259c2caa4ab030b5ec';
 // Before pushing to main branch change the URL to the final project deployed URL
-const redirectUri = 'https://magicaryn.github.io/ConcertSampler/index.html';
-// const redirectUri = 'http://127.0.0.1:5500/index.html';
+// const redirectUri = 'https://magicaryn.github.io/ConcertSampler/index.html';
+const redirectUri = 'http://127.0.0.1:5500/index.html';
 // ---------------------------------------------------------------------------
 
 var eventObj = {};
@@ -28,7 +28,6 @@ $(document).ready(function () {
     let todayDateString = todayDate.toISOString().split('T')[0];
 
     document.getElementById("startDate").value = todayDateString;
-    //document.getElementById("endDate").value = todayDateString;
 })
 
 function setCheckboxById(checkId) {
@@ -86,7 +85,8 @@ function getJambaseEventsByMetroID(metroId) {
         for (var i = 0; i < jsonObj.events.length; ++i) {
             let currentDate = new Date(jsonObj.events[i].startDate);
 
-            container.innerHTML += "<li onclick=\"getJambasePerformers('" + jsonObj.events[i].identifier + "')\">" + jsonObj.events[i].name + " Date: " + currentDate.toLocaleDateString() + "</li>"
+            //container.innerHTML += "<li onclick=\"getJambasePerformers('" + jsonObj.events[i].identifier + "')\">" + jsonObj.events[i].name + " Date: " + currentDate.toLocaleDateString() + "</li>"
+            container.innerHTML += "<li>" + jsonObj.events[i].name + " Date: " + currentDate.toLocaleDateString() + "</li>"
         }
 
         for (var i = 0; i < eventObj.events.length; ++i) {
@@ -147,7 +147,8 @@ function searchMetros() {
             }
             ++index;
 
-            container.innerHTML += "<li class=\"" + cssClass + "\" onclick=\"getJambaseEventsByMetroID('" + jsonMetroObj.metros[i].identifier + "')\">" + jsonMetroObj.metros[i].name + " ~ " + jsonMetroObj.metros[i].address.addressRegion + "</li>";
+            //container.innerHTML += "<li class=\"" + cssClass + "\" onclick=\"getJambaseEventsByMetroID('" + jsonMetroObj.metros[i].identifier + "')\">" + jsonMetroObj.metros[i].name + " ~ " + jsonMetroObj.metros[i].address.addressRegion + "</li>";
+            container.innerHTML += "<li id='eventslist' class=\"" + cssClass + "\" onclick=\"getJambaseEventsByMetroID('" + jsonMetroObj.metros[i].identifier + "')\">" + jsonMetroObj.metros[i].name + " ~ " + jsonMetroObj.metros[i].address.addressRegion + "</li>";
         }
     }    
 
@@ -287,7 +288,7 @@ async function addItemsToPlaylist(playlistId, userId, trackIdsArray, accessToken
     const data = await response.json();
 
     let container = document.getElementById("results-container");
-    container.innerHTML += ('<li>Good news!  Your playlist has been created.  It has been added to your Spotify library and can also be listened to here.</li>');
+    container.innerHTML += ('<li>Good news!  Your playlist has been created.  It has been added to your Spotify library and you can also listen below.</li>');
 
     iframePlaylist(playlistId, accessToken);
 }
@@ -295,7 +296,8 @@ async function addItemsToPlaylist(playlistId, userId, trackIdsArray, accessToken
 
 function iframePlaylist(playlistId, accessToken) {
  let container = document.getElementById("playlistiframe");
-    container.innerHTML += ("<iframe " + 
+    container.innerHTML += ("<button id='unfollow'>Click here to remove playlist from your library</button>" + 
+    "<iframe " + 
     "style='border-radius:12px' " +
     "src=https://open.spotify.com/embed/playlist/" + playlistId + "?utm_source=generator&theme=0 " +
     "width='100%' " +
@@ -303,10 +305,10 @@ function iframePlaylist(playlistId, accessToken) {
     "frameBorder='0' " +
     "allowfullscreen='' " +
     "allow='autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture' " +
-    "loading='lazy'><br />" +
-    "<button id='unfollow'>Click here to remove playlist from your library</button>");
+    "loading='lazy'><br />");
 
-    // unfollowEl.addEventListener('click', unfollowPlaylist(playlistId, accessToken));
+    unfollowEl = document.getElementById("unfollow");
+    unfollowEl.addEventListener('click', function(){unfollowPlaylist(playlistId, accessToken);});
 }
 
 async function unfollowPlaylist(playlistId, accessToken) {
@@ -318,7 +320,10 @@ async function unfollowPlaylist(playlistId, accessToken) {
         }
     });
     
-    unfollowEl.remove();
+    let container = document.getElementById("playlistiframe");
+    var removePlaylistEl = document.createElement('p');
+    removePlaylistEl.textContent = ("CONFIRMED: Playlist has been removed from your library");
+    container.replaceChild(removePlaylistEl, unfollowEl);
 }
 
 // Spotify Authentification
@@ -365,7 +370,7 @@ var spotifyAuthentification = async function () {
 
 
 
-    const scope = 'playlist-modify-public';
+    const scope = 'playlist-modify-public playlist-modify-private';
     const authUrl = new URL("https://accounts.spotify.com/authorize");
 
     // generated in the previous step
