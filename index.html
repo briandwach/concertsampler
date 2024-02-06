@@ -43,14 +43,15 @@
                 </div>
                 <div class="inline">
                     <div class="inline" id="calendar">
+                        <p id="metrolabel"></p>
                         <label for="dateRange">Date Range:</label>
                         <div class="inline" id="startDateContainer">
                             <input type="date" id="startDate" pattern="\d{4}-\d{2}-\d{2}" name="startDate"
                                 onchange="filterByDates(event);">
                         </div>
                         <div class="inline" id="endDateContainer">
-                            <input type="date" id="endDate" pattern="\d{4}-\d{2}-\d{2}"
-                                name="endDate" onchange="filterByDates(event);">
+                            <input type="date" id="endDate" pattern="\d{4}-\d{2}-\d{2}" name="endDate"
+                                onchange="filterByDates(event);">
                         </div>
                     </div>
                 </div>
@@ -63,20 +64,19 @@
                     <span class="checkmark"></span>
                 </label>
                 <label class="container">
-                    Step 2. Enter and select the city you're traveling to
+                    Step 2. Enter and click the city you're traveling to
                     <input type="checkbox" id="checkboxNoLabel2" disabled="true">
                     <span class="checkmark"></span>
                 </label>
                 <label class="container">
-                    Step 3. Select the dates you'll be there and enjoy you're personalized playlist!
+                    Step 3. Select the dates you'll be there and then create your personalized playlist!
                     <input type="checkbox" id="checkboxNoLabel3" disabled="true">
                     <span class="checkmark"></span>
                 </label>
-                <p>
-                    <button value="Create All Tracks" id="createtracks"
-                        onclick="onClickCreateAllTracksPlaylist()">Create Playlist</button>
-                </p>
             </div>
+            <p>
+                <button value="Create All Tracks" id="createtracks">Create Playlist</button>
+            </p>
         </div>
         </div>
         </div>
