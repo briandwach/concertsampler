@@ -1,6 +1,7 @@
 var authenticateEl = document.getElementById("authenticate");
 var loggedInEl = document.getElementById("loggedin");
 var unfollowEl = document.getElementById("unfollow");
+var createTracksEl = document.getElementById("createtracks");
 
 const JAMBASE_API_URL = "https://www.jambase.com/jb-api";
 const JAMBASE_API_KEY = "c06e8359-9476-484d-8390-20a1f50ca68d";
@@ -9,8 +10,8 @@ const JAMBASE_API_KEY = "c06e8359-9476-484d-8390-20a1f50ca68d";
 // clientID is specific to the registered application with Spotify
 const clientId = '2b183a70265148259c2caa4ab030b5ec';
 // Before pushing to main branch change the URL to the final project deployed URL
-const redirectUri = 'https://magicaryn.github.io/ConcertSampler/index.html';
-//const redirectUri = 'http://127.0.0.1:5500/index.html';
+// const redirectUri = 'https://magicaryn.github.io/ConcertSampler/index.html';
+const redirectUri = 'http://127.0.0.1:5500/index.html';
 // ---------------------------------------------------------------------------
 
 var eventObj = {};
@@ -27,6 +28,7 @@ $(document).ready(function () {
     let todayDateString = todayDate.toISOString().split('T')[0];
 
     document.getElementById("startDate").value = todayDateString;
+    //document.getElementById("endDate").value = todayDateString;
 })
 
 function setCheckboxById(checkId) {
@@ -118,7 +120,6 @@ function getJambasePerformers(eventId) {
         }
     }
 
-    setCheckboxById("checkboxNoLabel3");
 }
 
 function onClickCreateAllTracksPlaylist() {
@@ -158,6 +159,8 @@ function searchMetros() {
 
 function filterByDates(e) {
     getJambaseEventsByMetroID(null);
+    setCheckboxById("checkboxNoLabel3");
+    createTracksEl.style.display = 'block'; 
 }
 
 function createAllTracksPlaylist() {
@@ -239,8 +242,6 @@ async function getSpotifyUserID(trackIdsArray, artist, accessToken) {
 
     var userId = data.id;
     
-    container.innerHTML += ('<li>Hello ' + data.display_name + '!</li>');
-
     createSpotifyPlaylist(userId, trackIdsArray, artist, accessToken);
 };
 
@@ -263,7 +264,7 @@ async function createSpotifyPlaylist(userId, trackIdsArray, artist, accessToken)
 
     addItemsToPlaylist(playlistId, userId, trackIdsArray, accessToken);
 
-    setCheckboxById("checkboxNoLabel1");
+    
 }
 
 async function addItemsToPlaylist(playlistId, userId, trackIdsArray, accessToken) {
@@ -470,16 +471,18 @@ window.location.replace(redirectUri);
 }
 
 
-var checkUserAuthentification = function() {
+var checkUserAuthentification = async function() {
     if ((localStorage.getItem("refresh_token")) !== "undefined" && localStorage.getItem("refresh_token") !== null) {
-        getRefreshToken();
+        await getRefreshToken();
         loggedInEl.textContent = ('Welcome, ' + localStorage.getItem('display_name') + '!');
         authenticateEl.textContent = ('Click here to log out of Spotify');
+        setCheckboxById("checkboxNoLabel1");
         authenticateEl.addEventListener('click', logOut);
     } else if (window.location.search !== '' && !window.location.search.includes("error")) {
-        getToken();
+        await getToken();
         loggedInEl.textContent = ('Welcome, ' + localStorage.getItem('display_name') + '!');
         authenticateEl.textContent = ('Click here to log out of Spotify');
+        setCheckboxById("checkboxNoLabel1");
         authenticateEl.addEventListener('click', logOut);   
     } else {
         authenticateEl.textContent = ('Click here to link your Spotify account');

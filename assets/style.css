@@ -90,6 +90,10 @@ font-family: 'Protest Riot', sans-serif;
     margin-bottom: 40px;
 }
 
+#createtracks {
+    display: none;
+}
+
 
 /* The container */
 .container {
