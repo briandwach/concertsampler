@@ -1,11 +1,10 @@
 
 header {
-    font-size: xx-large;
     font-weight: bold;
     color: #ff0062;
    text-shadow: 3px 3px 5px black;
-
-
+   font-family: 'Oregano', cursive;
+    font-size: 45px
    
   ;
 }
@@ -16,7 +15,8 @@ header img {
 }
 
 main {
-    margin-left: 15%;
+    margin-left: 10%;
+    margin-right: 10%;
 }
 
 .flex {
@@ -37,8 +37,10 @@ li::marker {
 
 .mainblurb {
     font-size: x-large;
-    width: 45%;
-    margin-left: 40%;
+margin: auto;
+padding: 30px;
+font-family: 'Protest Riot', sans-serif;;
+
 }
 
 .paragraph{
@@ -50,40 +52,30 @@ button {
     background-color: black;
     color: #ff0062;
     border-radius: 10px;
-}
-
-#search {
-
+    font-family: 'Oregano', cursive;
 }
 
 
-#calendar{
+.inline {
+  display: inline-block;
 }
 
 
-#list-results{
-
+#calendar {
+    float: left;
 }
 
-
-#spotify-login{
-
+#radio-checker { 
+float: right;
+margin-left: 60px;
 }
 
-
-#results-container{
+.hidden {
+    display: none;
 }
 
-#authenticate{
-
-}
-
-#startDate{
-
-}
-
-#endDate{
-
+.show {
+    display: all;
 }
 
 /* media queries */
@@ -125,11 +117,11 @@ button {
     #calendar{
         flex-direction: column;
         font-size: x-large;
+        margin: auto;
         
         
     }
 
-    
 
     #startDateContainer{
         padding-bottom: 10px;
@@ -221,3 +213,4 @@ button {
     -ms-transform: rotate(45deg);
     transform: rotate(45deg);
   }
+
