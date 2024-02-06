@@ -28,7 +28,7 @@ $(document).ready(function () {
     let todayDateString = todayDate.toISOString().split('T')[0];
 
     document.getElementById("startDate").value = todayDateString;
-    createTracksEl.addEventListener('click', onClickCreateAllTracksPlaylist);
+    
 })
 
 function setCheckboxById(checkId) {
@@ -57,10 +57,13 @@ function processJambaseMetrosResponse(response) {
     return JSON.parse(response);
 }
 
-function getJambaseEventsByMetroID(metroId) {
+function getJambaseEventsByMetroID(metroId, metroName) {
     if (metroId != null) {
         cachedMetroId = metroId;
+        localStorage.setItem('Metro Name', metroName);
     }
+
+    
 
     document.getElementById("search").style.display = "none";
     document.getElementById("calendar").style.display = "block";
@@ -123,9 +126,6 @@ function getJambasePerformers(eventId) {
 
 }
 
-function onClickCreateAllTracksPlaylist() {
-    createAllTracksPlaylist();
-}
 
 function searchMetros() {
     let searchString = document.getElementById("textSearch").value;
@@ -149,20 +149,34 @@ function searchMetros() {
             ++index;
 
             //container.innerHTML += "<li class=\"" + cssClass + "\" onclick=\"getJambaseEventsByMetroID('" + jsonMetroObj.metros[i].identifier + "')\">" + jsonMetroObj.metros[i].name + " ~ " + jsonMetroObj.metros[i].address.addressRegion + "</li>";
-            container.innerHTML += "<li id='eventslist' class=\"" + cssClass + "\" onclick=\"getJambaseEventsByMetroID('" + jsonMetroObj.metros[i].identifier + "')\">" + jsonMetroObj.metros[i].name + " ~ " + jsonMetroObj.metros[i].address.addressRegion + "</li>";
+            container.innerHTML += "<li id='eventslist' class=\"" + cssClass + "\" onclick=\"getJambaseEventsByMetroID('" + jsonMetroObj.metros[i].identifier + "', '" + jsonMetroObj.metros[i].name + "')\">" + jsonMetroObj.metros[i].name + " ~ " + jsonMetroObj.metros[i].address.addressRegion + "</li>";
         }
     }    
 
     return resultsArr;
 }
 
-
-// Spotify API Functions // Spotify API Functions // Spotify API Functions // Spotify API Functions // Spotify API Functions // Spotify API Functions
-
 function filterByDates(e) {
     getJambaseEventsByMetroID(null);
     setCheckboxById("checkboxNoLabel3");
+
+    var formatStartDate = document.getElementById("startDate").value;
+    var formatEndDate = document.getElementById("endDate").value;
+
+    formatStartDate = formatDates(formatStartDate);
+    formatEndDate = formatDates(formatEndDate);
+
+    localStorage.setItem('Start Date', formatStartDate);
+    localStorage.setItem('End Date', formatEndDate);
+
     createTracksEl.style.display = 'block';
+    createTracksEl.addEventListener('click', createAllTracksPlaylist);
+}
+
+function formatDates(dateParam) {
+    var dateArray = dateParam.split('-');
+    newDate = (dateArray[1] + '-' + dateArray[2] + '-' + dateArray[0]);
+    return newDate;
 }
 
 function createAllTracksPlaylist() {
@@ -178,9 +192,9 @@ function createAllTracksPlaylist() {
     }
 }
 
+// Spotify API Functions // Spotify API Functions // Spotify API Functions // Spotify API Functions // Spotify API Functions // Spotify API Functions
+
 async function searchForSpotifyArtist(artist, createPlaylist) {
-    //alert("Calling searchForSpotifyArtist for parameter artist as: " + artist);
-    //return; //Spotify Artist ID
     let accessToken = localStorage.getItem('access_token');
 
     const response = await fetch('https://api.spotify.com/v1/search?q=' + artist + '&type=artist&market=US&limit=5', {
@@ -197,13 +211,13 @@ async function searchForSpotifyArtist(artist, createPlaylist) {
     } else {
         var spotifyArtistId = (data.artists.items[0].id);
 
-        getSpotifyArtistTopTracks(spotifyArtistId, artist, accessToken, createPlaylist);
+        getSpotifyArtistTopTracks(spotifyArtistId, accessToken, createPlaylist);
     }
 
 };
 
 
-async function getSpotifyArtistTopTracks(artistID, artist, accessToken, createPlaylist) {
+async function getSpotifyArtistTopTracks(artistID, accessToken, createPlaylist) {
     let container = document.getElementById("results-container");
 
     container.textContent = "";
@@ -225,11 +239,11 @@ async function getSpotifyArtistTopTracks(artistID, artist, accessToken, createPl
     };
 
     if (createPlaylist) {
-        getSpotifyUserID(allTracksArr, artist, accessToken);
+        getSpotifyUserID(allTracksArr, accessToken);
     }
 }
 
-async function getSpotifyUserID(trackIdsArray, artist, accessToken) {
+async function getSpotifyUserID(trackIdsArray, accessToken) {
 
     let container = document.getElementById("results-container");
 
@@ -244,17 +258,25 @@ async function getSpotifyUserID(trackIdsArray, artist, accessToken) {
 
     var userId = data.id;
     
-    createSpotifyPlaylist(userId, trackIdsArray, artist, accessToken);
+    createSpotifyPlaylist(userId, trackIdsArray, accessToken);
 };
 
-async function createSpotifyPlaylist(userId, trackIdsArray, artist, accessToken) {
+async function createSpotifyPlaylist(userId, trackIdsArray, accessToken) {
+
+    var dateRange= "";
+
+    if (localStorage.getItem('Start Date') === localStorage.getItem('End Date')) {
+        dateRange = localStorage.getItem('Start Date');
+    } else {
+        dateRange = (localStorage.getItem('Start Date') + ' - ' + localStorage.getItem('End Date'));
+    }
 
     const response = await fetch('https://api.spotify.com/v1/users/' + userId + '/playlists', {
         method: 'POST',
         headers: {
             Authorization: 'Bearer ' + accessToken,
         }, body:JSON.stringify({
-            "name": artist + " from Concert Sampler",
+            "name": localStorage.getItem('Metro Name') + " " + dateRange + " from Concert Sampler",
             "description": "Created by Concert Sampler web application",
             "public": true
         })
@@ -264,12 +286,12 @@ async function createSpotifyPlaylist(userId, trackIdsArray, artist, accessToken)
 
     var playlistId = data.id; 
 
-    addItemsToPlaylist(playlistId, userId, trackIdsArray, accessToken);
+    addItemsToPlaylist(playlistId, trackIdsArray, accessToken);
 
     
 }
 
-async function addItemsToPlaylist(playlistId, userId, trackIdsArray, accessToken) {
+async function addItemsToPlaylist(playlistId, trackIdsArray, accessToken) {
 
     var trackIdsUris = [];
 
@@ -309,7 +331,7 @@ function iframePlaylist(playlistId, accessToken) {
     "loading='lazy'><br />");
 
     createTracksEl.textContent = ('Start New Search');
-    createTracksEl.removeEventListener('click', onClickCreateAllTracksPlaylist);
+    createTracksEl.removeEventListener('click', createAllTracksPlaylist);
     createTracksEl.addEventListener('click', startNewSearch);
 
     unfollowEl = document.getElementById("unfollow");
