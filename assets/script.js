@@ -89,7 +89,7 @@ function getJambaseEventsByMetroID(metroId, metroName) {
 
     artistsArr = [];
 
-    if (jsonObj.events != null) {
+    if (jsonObj.events.length != 0) {
         for (var i = 0; i < jsonObj.events.length; ++i) {
             let currentDate = new Date(jsonObj.events[i].startDate);
 
@@ -102,6 +102,9 @@ function getJambaseEventsByMetroID(metroId, metroName) {
                 artistsArr.push(eventObj.events[i].performer[j].name);
             }
         }
+    } else {
+        createTracksEl.style.display = 'none';
+        createTracksEl.removeEventListener('click', createAllTracksPlaylist);
     }
 
     setCheckboxById("checkboxNoLabel2");
@@ -161,8 +164,8 @@ function searchMetros() {
 }
 
 function filterByDates(e) {
-    getJambaseEventsByMetroID(null);
-    setCheckboxById("checkboxNoLabel3");
+    createTracksEl.style.display = 'block';
+    createTracksEl.addEventListener('click', createAllTracksPlaylist);
 
     var formatStartDate = document.getElementById("startDate").value;
     var formatEndDate = document.getElementById("endDate").value;
@@ -170,15 +173,16 @@ function filterByDates(e) {
     if (formatEndDate == '') {
         formatEndDate = 'Onward';
     } else {
-    formatStartDate = formatDates(formatStartDate);
-    formatEndDate = formatDates(formatEndDate);
+        formatEndDate = formatDates(formatEndDate);
     }
+
+    formatStartDate = formatDates(formatStartDate);
 
     localStorage.setItem('Start Date', formatStartDate);
     localStorage.setItem('End Date', formatEndDate);
 
-    createTracksEl.style.display = 'block';
-    createTracksEl.addEventListener('click', createAllTracksPlaylist);
+    getJambaseEventsByMetroID(null);
+    setCheckboxById("checkboxNoLabel3");
 }
 
 function formatDates(dateParam) {
@@ -189,11 +193,10 @@ function formatDates(dateParam) {
 
 function createAllTracksPlaylist() {
 
-artistsArr = removeDuplicates(artistsArr);
+    artistsArr = removeDuplicates(artistsArr);
 
-
-   for (i = 0; i < artistsArr.length; ++i) {
-        if (i == artistsArr.length - 1 || i == 33) {
+    for (i = 0; i < artistsArr.length; ++i) {
+        if (i == artistsArr.length - 1 || i == 49) {
             searchForSpotifyArtist(artistsArr[i], true);
             break;
         } else {
@@ -205,12 +208,12 @@ artistsArr = removeDuplicates(artistsArr);
 function removeDuplicates(arr) {
     let newArr = [];
     for (let i = 0; i < arr.length; i++) {
-      if (!newArr.includes(arr[i])) {
-        newArr.push(arr[i]);
-      }
+        if (!newArr.includes(arr[i])) {
+            newArr.push(arr[i]);
+        }
     }
     return newArr;
-  }
+}
 
 
 // Spotify API Functions // Spotify API Functions // Spotify API Functions // Spotify API Functions // Spotify API Functions // Spotify API Functions
@@ -227,15 +230,14 @@ async function searchForSpotifyArtist(artist, createPlaylist) {
 
     const data = await response.json();
 
-
     if (createPlaylist) {
-    if (data.artists.items[0].name !== artist) {
-        getSpotifyUserID(allTracksArr, accessToken);
-    } else {
-        var spotifyArtistId = (data.artists.items[0].id);
-        getSpotifyArtistTopTracks(spotifyArtistId, accessToken, createPlaylist);
-    }
-    } else if (data.artists.items[0].name !== artist) {
+        if (data.artists.items[0].name != artist) {
+            getSpotifyUserID(allTracksArr, accessToken);
+        } else {
+            var spotifyArtistId = (data.artists.items[0].id);
+            getSpotifyArtistTopTracks(spotifyArtistId, accessToken, createPlaylist);
+        }
+    } else if (data.artists.items[0].name != artist) {
         return;
     } else {
         var spotifyArtistId = (data.artists.items[0].id);
@@ -260,7 +262,7 @@ async function getSpotifyArtistTopTracks(artistID, accessToken, createPlaylist) 
 
     var trackIdsArray = [];
 
-    for (var t = 0; t < 3; t++) {
+    for (var t = 0; t < 2; t++) {
         if (data.tracks[t] != 'undefined' && data.tracks[t] != null) {
             trackIdsArray[t] = data.tracks[t].id;
             allTracksArr.push(data.tracks[t].id);
