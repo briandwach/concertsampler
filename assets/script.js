@@ -89,7 +89,7 @@ function getJambaseEventsByMetroID(metroId, metroName) {
 
     artistsArr = [];
 
-    if (jsonObj.events.length != 0) {
+    if (jsonObj.events != null && jsonObj.events.length != 0 ) {
         for (var i = 0; i < jsonObj.events.length; ++i) {
             let currentDate = new Date(jsonObj.events[i].startDate);
 
