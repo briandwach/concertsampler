@@ -13,8 +13,8 @@ const JAMBASE_API_KEY = "c06e8359-9476-484d-8390-20a1f50ca68d";
 // clientID is specific to the registered application with Spotify
 const clientId = '2b183a70265148259c2caa4ab030b5ec';
 // Before pushing to main branch change the URL to the final project deployed URL
-//const redirectUri = 'https://magicaryn.github.io/ConcertSampler/index.html';
-const redirectUri = 'http://127.0.0.1:5500/index.html';
+const redirectUri = 'https://magicaryn.github.io/ConcertSampler/index.html';
+// const redirectUri = 'http://127.0.0.1:5500/index.html';
 // ---------------------------------------------------------------------------
 
 var eventObj = {};
@@ -81,8 +81,6 @@ function getJambaseEventsByMetroID(metroId, metroName) {
 
     let jsonObj = JSON.parse(response);
 
-    console.log(jsonObj);
-
     eventObj = jsonObj;
 
     let container = document.getElementById("results-container");
@@ -91,7 +89,7 @@ function getJambaseEventsByMetroID(metroId, metroName) {
 
     artistsArr = [];
 
-    if (jsonObj.events != null) {
+    if (jsonObj.events.length != 0) {
         for (var i = 0; i < jsonObj.events.length; ++i) {
             let currentDate = new Date(jsonObj.events[i].startDate);
 
@@ -104,6 +102,9 @@ function getJambaseEventsByMetroID(metroId, metroName) {
                 artistsArr.push(eventObj.events[i].performer[j].name);
             }
         }
+    } else {
+        createTracksEl.style.display = 'none';
+        createTracksEl.removeEventListener('click', createAllTracksPlaylist);
     }
 
     setCheckboxById("checkboxNoLabel2");
@@ -163,8 +164,8 @@ function searchMetros() {
 }
 
 function filterByDates(e) {
-    getJambaseEventsByMetroID(null);
-    setCheckboxById("checkboxNoLabel3");
+    createTracksEl.style.display = 'block';
+    createTracksEl.addEventListener('click', createAllTracksPlaylist);
 
     var formatStartDate = document.getElementById("startDate").value;
     var formatEndDate = document.getElementById("endDate").value;
@@ -172,15 +173,16 @@ function filterByDates(e) {
     if (formatEndDate == '') {
         formatEndDate = 'Onward';
     } else {
-    formatStartDate = formatDates(formatStartDate);
-    formatEndDate = formatDates(formatEndDate);
+        formatEndDate = formatDates(formatEndDate);
     }
+
+    formatStartDate = formatDates(formatStartDate);
 
     localStorage.setItem('Start Date', formatStartDate);
     localStorage.setItem('End Date', formatEndDate);
 
-    createTracksEl.style.display = 'block';
-    createTracksEl.addEventListener('click', createAllTracksPlaylist);
+    getJambaseEventsByMetroID(null);
+    setCheckboxById("checkboxNoLabel3");
 }
 
 function formatDates(dateParam) {
@@ -191,11 +193,9 @@ function formatDates(dateParam) {
 
 function createAllTracksPlaylist() {
 
-artistsArr = removeDuplicates(artistsArr);
+    artistsArr = removeDuplicates(artistsArr);
 
-console.log(artistsArr);
-
-   for (i = 0; i < artistsArr.length; ++i) {
+    for (i = 0; i < artistsArr.length; ++i) {
         if (i == artistsArr.length - 1 || i == 49) {
             searchForSpotifyArtist(artistsArr[i], true);
             break;
@@ -208,12 +208,12 @@ console.log(artistsArr);
 function removeDuplicates(arr) {
     let newArr = [];
     for (let i = 0; i < arr.length; i++) {
-      if (!newArr.includes(arr[i])) {
-        newArr.push(arr[i]);
-      }
+        if (!newArr.includes(arr[i])) {
+            newArr.push(arr[i]);
+        }
     }
     return newArr;
-  }
+}
 
 
 // Spotify API Functions // Spotify API Functions // Spotify API Functions // Spotify API Functions // Spotify API Functions // Spotify API Functions
@@ -230,21 +230,16 @@ async function searchForSpotifyArtist(artist, createPlaylist) {
 
     const data = await response.json();
 
-    console.log(artist);
-    console.log(data.artists.items[0].name);
-
     if (createPlaylist) {
-    if (data.artists.items[0].name != artist) {
-        getSpotifyUserID(allTracksArr, accessToken);
-    } else {
-        console.log('Yes');
-        var spotifyArtistId = (data.artists.items[0].id);
-        getSpotifyArtistTopTracks(spotifyArtistId, accessToken, createPlaylist);
-    }
+        if (data.artists.items[0].name != artist) {
+            getSpotifyUserID(allTracksArr, accessToken);
+        } else {
+            var spotifyArtistId = (data.artists.items[0].id);
+            getSpotifyArtistTopTracks(spotifyArtistId, accessToken, createPlaylist);
+        }
     } else if (data.artists.items[0].name != artist) {
         return;
     } else {
-        console.log('Yes');
         var spotifyArtistId = (data.artists.items[0].id);
         getSpotifyArtistTopTracks(spotifyArtistId, accessToken, createPlaylist);
     }
