@@ -1,8 +1,10 @@
 # ConcertSampler
 
-This application is a great find for anyone that enjoys traveling! This web application allows for you to link your spotify account and get a playlist from all the artists performing in that city on the days that you are traveling there. The app makes it easy with the simple steps that we have for you.
+Check out the deployed application here: [Concert Sample](https://briandwach.github.io/concertsampler/)
 
- Step 1, you will link your spotify account. 
+This application is a great find for anyone that enjoys traveling! This web application allows for you to link your Spotify account and get a playlist from all the artists performing in that city on the days that you are traveling there. The app makes it easy with the simple steps that we have for you.
+
+ Step 1, you will link your Spotify account. 
 
  ![image](https://github.com/Magicaryn/ConcertSampler/assets/150097400/4dc40ded-826d-4921-8b95-e6e32d70ad33)
 
@@ -21,5 +23,3 @@ This application is also mobile friendly and will not have any issues when using
 ![image](https://github.com/Magicaryn/ConcertSampler/assets/150097400/c03a72e4-631d-4a85-8b62-9da60957628c)
 
 DISCLAIMER: To use this application while in Spotify's development mode, please send your Full Name and email associated with your Spotify user account (free or premium) to brian.d.wach@gmail.com.  You will be able to utilize the application after receiving confirmation from Brian Wach that you have been registered.
-
-URL to deployed application: https://magicaryn.github.io/ConcertSampler/
