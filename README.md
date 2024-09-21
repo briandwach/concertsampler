@@ -23,3 +23,5 @@ This application is also mobile friendly and will not have any issues when using
 ![image](https://github.com/Magicaryn/ConcertSampler/assets/150097400/c03a72e4-631d-4a85-8b62-9da60957628c)
 
 DISCLAIMER: To use this application while in Spotify's development mode, please send your Full Name and email associated with your Spotify user account (free or premium) to brian.d.wach@gmail.com.  You will be able to utilize the application after receiving confirmation from Brian Wach that you have been registered.
+
+Test
